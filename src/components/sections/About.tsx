@@ -33,35 +33,35 @@ export default function About() {
   return (
     <section id="about" ref={sectionRef} className="relative py-32 overflow-hidden">
       {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-white via-slate-50 to-white" />
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-32 bg-gradient-to-b from-transparent to-blue-600/30" />
+      <div className="absolute inset-0 bg-gradient-to-b from-white via-slate-50/70 to-white" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-24 bg-gradient-to-b from-transparent to-blue-600/25" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12">
         {/* Split layout */}
         <div className="grid lg:grid-cols-2 gap-20 items-start mb-24">
-          {/* Left — heading */}
+          {/* Left — sticky heading */}
           <div className="lg:sticky lg:top-32">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.7 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-light mb-8"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full badge-on-light mb-8"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
-              <span className="text-blue-600 text-xs font-semibold tracking-widest uppercase">
+              <span className="text-blue-700 text-xs font-semibold tracking-[0.18em] uppercase">
                 Who We Are
               </span>
             </motion.div>
 
-            <div className="text-clip">
+            <div className="overflow-hidden">
               <motion.h2
                 initial={{ y: "100%", opacity: 0 }}
                 animate={inView ? { y: 0, opacity: 1 } : {}}
                 transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
-                className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-slate-900 mb-6"
+                className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-[-0.02em] text-slate-900 mb-6"
               >
                 Your Strategic{" "}
-                <span className="gradient-text">Technology</span>{" "}
+                <span className="gradient-text-dark">Technology</span>{" "}
                 Partner
               </motion.h2>
             </div>
@@ -69,60 +69,55 @@ export default function About() {
             <motion.div
               initial={{ scaleX: 0 }}
               animate={inView ? { scaleX: 1 } : {}}
-              transition={{ delay: 0.5, duration: 0.8 }}
-              className="w-16 h-px bg-gradient-to-r from-blue-600 to-blue-600 origin-left"
+              transition={{ delay: 0.5, duration: 0.9 }}
+              className="w-14 h-[2px] bg-gradient-to-r from-blue-600 to-cyan-500 origin-left rounded-full"
             />
           </div>
 
-          {/* Right — content */}
-          <div className="space-y-8">
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.3, duration: 0.9 }}
-              className="text-slate-600 text-lg leading-relaxed"
-            >
-              At NYC GravityNet, we help businesses navigate the complexities of
-              today's digital landscape through innovative, secure, and scalable
-              technology solutions.
-            </motion.p>
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.45, duration: 0.9 }}
-              className="text-slate-500 leading-relaxed"
-            >
-              Our team of seasoned technologists, architects, and strategists
-              combine deep domain expertise with a relentless focus on outcomes.
-              We don't just implement tools — we architect transformations that
-              position your organization as a technology leader in your industry.
-            </motion.p>
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.55, duration: 0.9 }}
-              className="text-slate-500 leading-relaxed"
-            >
-              From Fortune 500 enterprises to high-growth scale-ups, our clients
-              share one thing in common: they chose NYC GravityNet to solve their
-              hardest technology challenges and unlock new possibilities.
-            </motion.p>
+          {/* Right — paragraphs */}
+          <div className="space-y-7">
+            {[
+              "At NYC GravityNet, we help businesses navigate the complexities of today's digital landscape through innovative, secure, and scalable technology solutions.",
+              "Our team of seasoned technologists, architects, and strategists combine deep domain expertise with a relentless focus on outcomes. We don't just implement tools — we architect transformations that position your organization as a technology leader in your industry.",
+              "From Fortune 500 enterprises to high-growth scale-ups, our clients share one thing in common: they chose NYC GravityNet to solve their hardest technology challenges and unlock new possibilities.",
+            ].map((text, i) => (
+              <motion.p
+                key={i}
+                initial={{ opacity: 0, y: 28 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ delay: 0.28 + i * 0.14, duration: 0.9 }}
+                className={`leading-[1.8] ${
+                  i === 0
+                    ? "text-slate-700 text-lg font-[450]"
+                    : "text-slate-500 text-base"
+                }`}
+              >
+                {text}
+              </motion.p>
+            ))}
           </div>
         </div>
 
-        {/* Pillars */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-px bg-black/5 rounded-2xl overflow-hidden">
+        {/* Pillars — white cards with accent numbers */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
           {pillars.map(({ num, title, body }, i) => (
             <motion.div
               key={num}
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 36 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.6 + i * 0.12, duration: 0.8 }}
-              className="group bg-slate-50 hover:bg-slate-100 p-8 transition-colors duration-500"
+              transition={{ delay: 0.55 + i * 0.1, duration: 0.85 }}
+              className="card-surface group relative rounded-2xl p-8 transition-all duration-500 overflow-hidden"
             >
-              <span className="block text-xs font-mono text-blue-600/50 mb-4 tracking-widest">{num}</span>
-              <h3 className="text-slate-900 font-semibold mb-3 group-hover:text-blue-500 transition-colors duration-300">{title}</h3>
-              <p className="text-slate-500 text-sm leading-relaxed">{body}</p>
+              {/* Top accent bar on hover */}
+              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-blue-600 to-cyan-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left rounded-b-full" />
+
+              <span className="block text-[2.5rem] font-black text-slate-100 leading-none mb-4 select-none group-hover:text-blue-50 transition-colors duration-300">
+                {num}
+              </span>
+              <h3 className="text-slate-900 font-semibold mb-3 group-hover:text-blue-700 transition-colors duration-300">
+                {title}
+              </h3>
+              <p className="text-slate-500 text-sm leading-[1.75]">{body}</p>
             </motion.div>
           ))}
         </div>

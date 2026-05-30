@@ -43,7 +43,7 @@ body {
 }
 
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 3px;
 }
 
 ::-webkit-scrollbar-track {
@@ -51,7 +51,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #2563eb;
+  background: linear-gradient(to bottom, #2563eb, #06b6d4);
   border-radius: 2px;
 }
 
@@ -59,6 +59,7 @@ body {
   overflow: hidden;
 }
 
+/* On dark backgrounds, gradient goes white → cyan → blue */
 .gradient-text {
   background: linear-gradient(135deg, #ffffff 0%, #06b6d4 50%, #2563eb 100%);
   -webkit-background-clip: text;
@@ -66,39 +67,85 @@ body {
   background-clip: text;
 }
 
-.gradient-text-blue {
-  background: linear-gradient(135deg, #06b6d4 0%, #2563eb 100%);
+/* On light backgrounds, gradient goes deep-blue → blue → cyan */
+.gradient-text-dark {
+  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #06b6d4 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.glass {
-  background: rgba(6, 13, 26, 0.7);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+.gradient-text-blue {
+  background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
+/* Dark glass — for dark sections */
+.glass {
+  background: rgba(6, 13, 26, 0.75);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* Glass for dark backgrounds */
 .glass-light {
   background: rgba(255, 255, 255, 0.04);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Badge pill for light-background sections */
+.badge-on-light {
+  background: rgba(37, 99, 235, 0.07);
+  border: 1px solid rgba(37, 99, 235, 0.18);
+  backdrop-filter: blur(8px);
+}
+
+/* Premium card for light sections */
+.card-surface {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+.card-surface:hover {
+  border-color: rgba(37, 99, 235, 0.18);
+  box-shadow: 0 12px 48px rgba(37, 99, 235, 0.07), 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* Shine sweep animation for buttons */
+@keyframes shine-sweep {
+  from { transform: translateX(-100%) skewX(-12deg); }
+  to   { transform: translateX(250%) skewX(-12deg); }
+}
+
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.18) 50%, transparent 60%);
+  transform: translateX(-100%) skewX(-12deg);
+}
+
+.btn-shine:hover::after {
+  animation: shine-sweep 0.55s ease forwards;
 }
 
 @keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-
-  to {
-    transform: translateX(-50%);
-  }
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
 }
 
 .marquee-track {
-  animation: marquee 30s linear infinite;
+  animation: marquee 28s linear infinite;
   display: flex;
   width: max-content;
 }
@@ -108,57 +155,47 @@ body {
 }
 
 @keyframes marquee-reverse {
-  from {
-    transform: translateX(-50%);
-  }
-
-  to {
-    transform: translateX(0);
-  }
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
 }
 
 .marquee-track-reverse {
-  animation: marquee-reverse 35s linear infinite;
+  animation: marquee-reverse 32s linear infinite;
   display: flex;
   width: max-content;
 }
 
 @keyframes gradientShift {
-  0% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
-
-  100% {
-    background-position: 0% 50%;
-  }
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .gradient-animated {
   background-size: 200% 200%;
-  animation: gradientShift 6s ease infinite;
+  animation: gradientShift 8s ease infinite;
 }
 
 @keyframes pulseGlow {
-
-  0%,
-  100% {
-    opacity: 0.5;
-  }
-
-  50% {
-    opacity: 1;
-  }
+  0%, 100% { opacity: 0.4; }
+  50%       { opacity: 1; }
 }
 
 .pulse-glow {
-  animation: pulseGlow 3s ease-in-out infinite;
+  animation: pulseGlow 2.5s ease-in-out infinite;
+}
+
+/* Floating glow orb */
+@keyframes floatOrb {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50%       { transform: translateY(-20px) scale(1.05); }
+}
+
+.float-orb {
+  animation: floatOrb 8s ease-in-out infinite;
 }
 
 ::selection {
-  background: rgba(6, 182, 212, 0.3);
+  background: rgba(6, 182, 212, 0.25);
   color: white;
 }
