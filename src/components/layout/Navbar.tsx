@@ -2,10 +2,17 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import { Menu, X } from "lucide-react";
 
-const navLinks = ["Home", "About", "Services", "Industries", "Contact"];
+const navLinks = [
+  { label: "Home",       href: "/"             },
+  { label: "About",      href: "/about"         },
+  { label: "Services",   href: "/services"      },
+  { label: "Industries", href: "/#industries"   },
+  { label: "Contact",    href: "/#contact"      },
+];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -49,26 +56,29 @@ export default function Navbar() {
 
           {/* Desktop Nav */}
           <div className="hidden lg:flex items-center gap-10">
-            {navLinks.map((link, i) => (
-              <motion.a
-                key={link}
-                href={`#${link.toLowerCase()}`}
+            {navLinks.map(({ label, href }, i) => (
+              <motion.div
+                key={label}
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 + i * 0.08, duration: 0.6 }}
-                className={`text-sm font-medium transition-colors duration-300 relative group ${
-                  scrolled
-                    ? "text-white/70 hover:text-white"
-                    : "text-white/90 hover:text-white"
-                }`}
               >
-                {link}
-                <span
-                  className={`absolute -bottom-0.5 left-0 w-0 h-px group-hover:w-full transition-all duration-300 ${
-                    scrolled ? "bg-cyan-400" : "bg-blue-600"
+                <Link
+                  href={href}
+                  className={`text-sm font-medium transition-colors duration-300 relative group ${
+                    scrolled
+                      ? "text-white/70 hover:text-white"
+                      : "text-white/90 hover:text-white"
                   }`}
-                />
-              </motion.a>
+                >
+                  {label}
+                  <span
+                    className={`absolute -bottom-0.5 left-0 w-0 h-px group-hover:w-full transition-all duration-300 ${
+                      scrolled ? "bg-cyan-400" : "bg-blue-600"
+                    }`}
+                  />
+                </Link>
+              </motion.div>
             ))}
             <motion.a
               href="#contact"
@@ -101,15 +111,15 @@ export default function Navbar() {
         className="fixed inset-0 z-40 glass lg:hidden pt-20"
       >
         <div className="flex flex-col gap-8 p-8">
-          {navLinks.map((link) => (
-            <a
-              key={link}
-              href={`#${link.toLowerCase()}`}
+          {navLinks.map(({ label, href }) => (
+            <Link
+              key={label}
+              href={href}
               onClick={() => setMenuOpen(false)}
               className="text-2xl font-semibold text-white/90 border-b border-white/10 pb-4 hover:text-white transition-colors"
             >
-              {link}
-            </a>
+              {label}
+            </Link>
           ))}
           <a
             href="#contact"
