@@ -67,6 +67,7 @@ const headline = ["Transforming Businesses", "Through AI, Cybersecurity", "& Dig
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const imageRef = useRef<HTMLDivElement>(null);
   const imageWrapRef = useRef<HTMLDivElement>(null);
   const [primaryPos, setPrimaryPos] = useState({ x: 0, y: 0 });
 
@@ -78,6 +79,13 @@ export default function Hero() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
+      // Zoom in on the NYC banner background
+      gsap.fromTo(
+        imageRef.current,
+        { scale: 1.15 },
+        { scale: 1, duration: 3.5, ease: "power3.out" }
+      );
+
       gsap.fromTo(
         imageWrapRef.current,
         { opacity: 0, scale: 1.06, y: 30 },
@@ -102,11 +110,30 @@ export default function Hero() {
       id="home"
       ref={containerRef}
       className="relative min-h-screen flex items-center overflow-hidden"
-      style={{ background: "linear-gradient(135deg, #020817 0%, #0a1628 40%, #061020 100%)" }}
     >
+      {/* NYC Banner background image */}
+      <div ref={imageRef} className="absolute inset-0 z-0">
+        <Image
+          src="/images/nyc-banner.avif"
+          alt="NYC GravityNet"
+          fill
+          priority
+          className="object-cover object-center"
+          sizes="100vw"
+        />
+      </div>
+
+      {/* Dark overlay — keeps text readable, preserves image depth */}
+      <div
+        className="absolute inset-0 z-[1]"
+        style={{
+          background: "linear-gradient(135deg, rgba(2,8,23,0.92) 0%, rgba(10,22,40,0.85) 40%, rgba(6,16,32,0.80) 100%)",
+        }}
+      />
+
       {/* Animated dot grid */}
       <div
-        className="absolute inset-0 z-[1] pointer-events-none"
+        className="absolute inset-0 z-[2] pointer-events-none"
         style={{
           backgroundImage: "radial-gradient(circle, rgba(37,99,235,0.20) 1px, transparent 1px)",
           backgroundSize: "52px 52px",
