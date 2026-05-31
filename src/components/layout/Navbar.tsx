@@ -59,7 +59,7 @@ export default function Navbar() {
                 className={`text-sm font-medium transition-colors duration-300 relative group ${
                   scrolled
                     ? "text-white/70 hover:text-white"
-                    : "text-slate-600 hover:text-slate-900"
+                    : "text-white/90 hover:text-white"
                 }`}
               >
                 {link}
@@ -84,7 +84,7 @@ export default function Navbar() {
           {/* Mobile Menu Toggle */}
           <button
             className={`lg:hidden p-2 transition-colors duration-300 ${
-              scrolled ? "text-white" : "text-slate-900"
+              scrolled ? "text-white" : "text-white/90 hover:text-white"
             }`}
             onClick={() => setMenuOpen(!menuOpen)}
           >
