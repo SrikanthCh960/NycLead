@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef, useState } from "react";
-import Image from "next/image";
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, Mail, Phone, Calendar } from "lucide-react";
 
@@ -22,22 +21,8 @@ export default function CTA() {
   return (
     <section id="contact" ref={ref} className="relative overflow-hidden" style={{ minHeight: "640px" }}>
 
-      {/* Background — Image 2: Cybersecurity (low opacity, parallax) */}
-      <div className="absolute inset-0 z-0 overflow-hidden">
-        <motion.div style={{ y: bgParallax }} className="absolute inset-[-10%]">
-          <Image
-            src="/images/cybersecurity-command-center.png"
-            alt=""
-            fill
-            className="object-cover object-center scale-110"
-            sizes="100vw"
-            aria-hidden="true"
-          />
-        </motion.div>
-      </div>
-
-      {/* Dark overlay stack — creates depth */}
-      <div className="absolute inset-0 z-[1] bg-gradient-to-br from-blue-950/97 via-slate-950/95 to-[#060d1a]/97" />
+      {/* Background gradient */}
+      <div className="absolute inset-0 z-[1]" style={{ background: "linear-gradient(160deg, #03081a 0%, #060f24 50%, #020810 100%)" }} />
 
       {/* Center radial glow */}
       <motion.div

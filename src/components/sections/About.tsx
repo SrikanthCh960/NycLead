@@ -184,88 +184,8 @@ export default function About() {
         <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 py-36">
           <div className="grid lg:grid-cols-2 gap-16 xl:gap-24 items-center">
 
-            {/* Left — Image 3 with parallax & floating cards */}
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              animate={consultingInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 1.1, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="relative order-2 lg:order-1"
-            >
-              <motion.div style={{ y: imgParallax }} className="relative">
-                {/* Glow halo */}
-                <div
-                  className="absolute inset-[-12%] rounded-[3rem] pointer-events-none"
-                  style={{
-                    background: "radial-gradient(ellipse at 50% 55%, rgba(37,99,235,0.28) 0%, rgba(6,182,212,0.08) 50%, transparent 70%)",
-                    filter: "blur(28px)",
-                  }}
-                />
-
-                {/* Main image */}
-                <div
-                  className="relative rounded-2xl overflow-hidden"
-                  style={{
-                    boxShadow: "0 0 0 1px rgba(37,99,235,0.22), 0 40px 100px rgba(0,0,0,0.65), 0 0 60px rgba(37,99,235,0.10)",
-                  }}
-                >
-                  <Image
-                    src="/images/technology-consulting-platform.png"
-                    alt="Digital Transformation & Technology Consulting"
-                    width={660}
-                    height={440}
-                    className="w-full h-auto object-cover"
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                  />
-                  <div
-                    className="absolute inset-0 pointer-events-none"
-                    style={{
-                      background: "linear-gradient(160deg, rgba(255,255,255,0.04) 0%, transparent 45%, rgba(6,12,28,0.35) 100%)",
-                    }}
-                  />
-                </div>
-
-                {/* Floating impact cards */}
-                {impactStats.map((stat, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, scale: 0.8, y: 14 }}
-                    animate={consultingInView ? { opacity: 1, scale: 1, y: 0 } : {}}
-                    transition={{ delay: 0.7 + i * 0.2, duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
-                    className="absolute z-10"
-                    style={{
-                      ...(i === 0 ? { top: "10%", left: "-6%" } :
-                          i === 1 ? { bottom: "18%", left: "-4%" } :
-                          { top: "42%", right: "-5%" }),
-                    }}
-                  >
-                    <motion.div
-                      animate={{ y: [0, -7, 0] }}
-                      transition={{ duration: 4 + i * 0.8, repeat: Infinity, ease: "easeInOut" }}
-                    >
-                      <div
-                        className="px-4 py-3.5 rounded-2xl"
-                        style={{
-                          background: "rgba(5,12,28,0.85)",
-                          backdropFilter: "blur(16px)",
-                          border: `1px solid ${stat.color}28`,
-                          boxShadow: `0 12px 40px rgba(0,0,0,0.5), 0 0 0 1px ${stat.color}12, inset 0 1px 0 rgba(255,255,255,0.06)`,
-                          minWidth: "140px",
-                        }}
-                      >
-                        <div className="text-white/40 text-[10px] font-medium mb-1">{stat.label}</div>
-                        <div className="flex items-baseline gap-2">
-                          <span className="text-white text-xl font-bold leading-none">{stat.value}</span>
-                          <span className="text-xs font-semibold" style={{ color: stat.color }}>{stat.delta}</span>
-                        </div>
-                      </div>
-                    </motion.div>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </motion.div>
-
-            {/* Right — Content */}
-            <div className="order-1 lg:order-2">
+            {/* Left — Content */}
+            <div className="order-1">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={consultingInView ? { opacity: 1, y: 0 } : {}}
@@ -332,6 +252,86 @@ export default function About() {
                 <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
               </motion.a>
             </div>
+
+            {/* Right — Image: Enterprise Consulting Team */}
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              animate={consultingInView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 1.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+              className="relative order-2"
+            >
+              <motion.div style={{ y: imgParallax }} className="relative">
+                {/* Warm glow halo */}
+                <div
+                  className="absolute inset-[-12%] rounded-[3rem] pointer-events-none"
+                  style={{
+                    background: "radial-gradient(ellipse at 50% 55%, rgba(37,99,235,0.22) 0%, rgba(6,182,212,0.10) 50%, transparent 70%)",
+                    filter: "blur(28px)",
+                  }}
+                />
+
+                {/* Main image */}
+                <div
+                  className="relative rounded-2xl overflow-hidden"
+                  style={{
+                    boxShadow: "0 0 0 1px rgba(37,99,235,0.20), 0 40px 100px rgba(0,0,0,0.60), 0 0 60px rgba(37,99,235,0.08)",
+                  }}
+                >
+                  <Image
+                    src="/images/enterprise-consulting-team.jpg"
+                    alt="Enterprise Consulting Team — Digital Transformation"
+                    width={660}
+                    height={480}
+                    className="w-full h-auto object-cover"
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                  />
+                  <div
+                    className="absolute inset-0 pointer-events-none"
+                    style={{
+                      background: "linear-gradient(160deg, rgba(255,255,255,0.03) 0%, transparent 45%, rgba(6,12,28,0.28) 100%)",
+                    }}
+                  />
+                </div>
+
+                {/* Floating impact cards */}
+                {impactStats.map((stat, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, scale: 0.8, y: 14 }}
+                    animate={consultingInView ? { opacity: 1, scale: 1, y: 0 } : {}}
+                    transition={{ delay: 0.7 + i * 0.2, duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
+                    className="absolute z-10"
+                    style={{
+                      ...(i === 0 ? { top: "10%", right: "-5%" } :
+                          i === 1 ? { bottom: "18%", right: "-4%" } :
+                          { top: "42%", left: "-6%" }),
+                    }}
+                  >
+                    <motion.div
+                      animate={{ y: [0, -7, 0] }}
+                      transition={{ duration: 4 + i * 0.8, repeat: Infinity, ease: "easeInOut" }}
+                    >
+                      <div
+                        className="px-4 py-3.5 rounded-2xl"
+                        style={{
+                          background: "rgba(5,12,28,0.85)",
+                          backdropFilter: "blur(16px)",
+                          border: `1px solid ${stat.color}28`,
+                          boxShadow: `0 12px 40px rgba(0,0,0,0.5), 0 0 0 1px ${stat.color}12, inset 0 1px 0 rgba(255,255,255,0.06)`,
+                          minWidth: "140px",
+                        }}
+                      >
+                        <div className="text-white/40 text-[10px] font-medium mb-1">{stat.label}</div>
+                        <div className="flex items-baseline gap-2">
+                          <span className="text-white text-xl font-bold leading-none">{stat.value}</span>
+                          <span className="text-xs font-semibold" style={{ color: stat.color }}>{stat.delta}</span>
+                        </div>
+                      </div>
+                    </motion.div>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </motion.div>
           </div>
         </div>
       </div>
