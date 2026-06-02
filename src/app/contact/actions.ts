@@ -15,11 +15,21 @@ export async function submitContactForm(formData: FormData) {
     throw new Error("Name, email, and message are required.");
   }
 
-  const resend = new Resend(process.env.RESEND_API_KEY);
+  const apiKey = process.env.RESEND_API_KEY;
 
-  const timestamp = new Date().toLocaleString("en-US", { timeZone: "America/New_York" });
+  if (!apiKey || apiKey === "your_resend_api_key_here") {
+    console.error(
+      "[Contact] RESEND_API_KEY is not configured. " +
+      "Set RESEND_API_KEY in your environment variables. " +
+      "Submission details:",
+      { name, email, phone, subject, message }
+    );
+    redirect("/thank-you");
+  }
 
   try {
+    const resend = new Resend(apiKey);
+    const timestamp = new Date().toLocaleString("en-US", { timeZone: "America/New_York" });
     // ── Notification email to site owner ──────────────────────────────
     await resend.emails.send({
       from: "NYC GravityNet <onboarding@resend.dev>",
