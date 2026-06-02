@@ -15,22 +15,11 @@ export async function submitContactForm(formData: FormData) {
     throw new Error("Name, email, and message are required.");
   }
 
-  const smtpHost = process.env.SMTP_HOST ?? "smtp.gmail.com";
-  const smtpPort = Number(process.env.SMTP_PORT ?? 587);
-  const smtpUser = process.env.SMTP_USER;
-  const smtpPass = process.env.SMTP_PASS;
-
-  // Validate SMTP config is fully set
-  if (!smtpUser || !smtpPass || smtpPass === "your_app_password_here") {
-    console.error(
-      "[Contact] SMTP credentials are not configured. " +
-      "Set SMTP_USER and SMTP_PASS in your environment variables (Vercel → Settings → Environment Variables). " +
-      "Submission details:",
-      { name, email, phone, subject, message }
-    );
-    // Still redirect so the user sees the thank-you page
-    redirect("/thank-you");
-  }
+  // TODO: move these to Vercel env vars after confirming email delivery works
+  const smtpHost = "smtp.gmail.com";
+  const smtpPort = 587;
+  const smtpUser = "rcsowjanya72@gmail.com";
+  const smtpPass = "ganbbldjgferlduh";
 
   const transporter = nodemailer.createTransport({
     host: smtpHost,
