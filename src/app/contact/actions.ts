@@ -24,7 +24,7 @@ export async function submitContactForm(formData: FormData) {
   const transporter = nodemailer.createTransport({
     host: smtpHost,
     port: smtpPort,
-    secure: smtpPort === 465,       // true only for port 465, false for 587 (STARTTLS)
+    secure: false,   // port 587 uses STARTTLS, not SSL
     auth: { user: smtpUser, pass: smtpPass },
   });
 
