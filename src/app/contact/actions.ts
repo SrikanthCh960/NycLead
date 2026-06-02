@@ -5,9 +5,9 @@ import { redirect } from "next/navigation";
 import { CONTACT_NOTIFICATION_EMAIL } from "@/lib/contact-config";
 
 export async function submitContactForm(formData: FormData) {
-  const name = String(formData.get("name") ?? "").trim();
-  const email = String(formData.get("email") ?? "").trim();
-  const phone = String(formData.get("phone") ?? "").trim();
+  const name    = String(formData.get("name")    ?? "").trim();
+  const email   = String(formData.get("email")   ?? "").trim();
+  const phone   = String(formData.get("phone")   ?? "").trim();
   const subject = String(formData.get("subject") ?? "").trim();
   const message = String(formData.get("message") ?? "").trim();
 
@@ -15,52 +15,106 @@ export async function submitContactForm(formData: FormData) {
     throw new Error("Name, email, and message are required.");
   }
 
+  const smtpHost = process.env.SMTP_HOST ?? "smtp.gmail.com";
+  const smtpPort = Number(process.env.SMTP_PORT ?? 587);
   const smtpUser = process.env.SMTP_USER;
   const smtpPass = process.env.SMTP_PASS;
 
-  if (smtpUser && smtpPass && smtpPass !== "your_app_password_here") {
-    try {
-      const transporter = nodemailer.createTransport({
-        host: process.env.SMTP_HOST ?? "smtp.gmail.com",
-        port: Number(process.env.SMTP_PORT ?? 587),
-        secure: false,
-        auth: { user: smtpUser, pass: smtpPass },
-      });
-
-      await transporter.sendMail({
-        from: `"NYC GravityNet Website" <${smtpUser}>`,
-        to: CONTACT_NOTIFICATION_EMAIL,
-        subject: "New Website Inquiry - NYC GravityNet",
-        html: `
-          <h2>New Contact Form Submission</h2>
-          <table style="border-collapse:collapse;width:100%">
-            <tr><td style="padding:8px;font-weight:bold">Name</td><td style="padding:8px">${name}</td></tr>
-            <tr><td style="padding:8px;font-weight:bold">Email</td><td style="padding:8px">${email}</td></tr>
-            ${phone ? `<tr><td style="padding:8px;font-weight:bold">Phone</td><td style="padding:8px">${phone}</td></tr>` : ""}
-            ${subject ? `<tr><td style="padding:8px;font-weight:bold">Subject</td><td style="padding:8px">${subject}</td></tr>` : ""}
-            <tr><td style="padding:8px;font-weight:bold;vertical-align:top">Message</td><td style="padding:8px">${message.replace(/\n/g, "<br>")}</td></tr>
-          </table>
-        `,
-      });
-
-      await transporter.sendMail({
-        from: `"NYC GravityNet" <${smtpUser}>`,
-        to: email,
-        subject: "We received your inquiry – NYC GravityNet",
-        html: `
-          <p>Hi ${name},</p>
-          <p>Thank you for reaching out to NYC GravityNet. We've received your inquiry and will get back to you shortly.</p>
-          <p>Here's a copy of your message:</p>
-          <blockquote style="border-left:4px solid #2563eb;padding-left:12px;color:#555">${message.replace(/\n/g, "<br>")}</blockquote>
-          <p>Best regards,<br>NYC GravityNet Team<br>New York, USA</p>
-        `,
-      });
-    } catch (err) {
-      console.error("[Contact] Email send failed:", err);
-    }
-  } else {
-    console.warn("[Contact] SMTP not configured — skipping email. Submission:", { name, email, phone, subject, message });
+  // Validate SMTP config is fully set
+  if (!smtpUser || !smtpPass || smtpPass === "your_app_password_here") {
+    console.error(
+      "[Contact] SMTP credentials are not configured. " +
+      "Set SMTP_USER and SMTP_PASS in your environment variables (Vercel → Settings → Environment Variables). " +
+      "Submission details:",
+      { name, email, phone, subject, message }
+    );
+    // Still redirect so the user sees the thank-you page
+    redirect("/thank-you");
   }
+
+  const transporter = nodemailer.createTransport({
+    host: smtpHost,
+    port: smtpPort,
+    secure: smtpPort === 465,       // true only for port 465, false for 587 (STARTTLS)
+    auth: { user: smtpUser, pass: smtpPass },
+  });
+
+  // Verify SMTP connection before sending
+  try {
+    await transporter.verify();
+  } catch (err) {
+    console.error("[Contact] SMTP connection verification failed:", err);
+    throw new Error("Could not connect to mail server. Please try again later.");
+  }
+
+  const timestamp = new Date().toLocaleString("en-US", { timeZone: "America/New_York" });
+
+  // ── Notification email to site owner ────────────────────────────────
+  await transporter.sendMail({
+    from: `"NYC GravityNet Website" <${smtpUser}>`,
+    to: CONTACT_NOTIFICATION_EMAIL,
+    replyTo: email,
+    subject: `New Inquiry${subject ? `: ${subject}` : ""} – NYC GravityNet`,
+    html: `
+      <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#f8fafc;padding:32px;border-radius:12px">
+        <div style="background:#1d4ed8;padding:20px 24px;border-radius:8px 8px 0 0;margin-bottom:0">
+          <h1 style="color:#fff;margin:0;font-size:20px">New Contact Form Submission</h1>
+          <p style="color:#bfdbfe;margin:4px 0 0;font-size:13px">${timestamp} (ET)</p>
+        </div>
+        <div style="background:#fff;padding:24px;border-radius:0 0 8px 8px;border:1px solid #e2e8f0">
+          <table style="width:100%;border-collapse:collapse">
+            <tr style="border-bottom:1px solid #f1f5f9">
+              <td style="padding:10px 8px;font-weight:bold;color:#475569;width:110px;font-size:14px">Name</td>
+              <td style="padding:10px 8px;color:#0f172a;font-size:14px">${name}</td>
+            </tr>
+            <tr style="border-bottom:1px solid #f1f5f9">
+              <td style="padding:10px 8px;font-weight:bold;color:#475569;font-size:14px">Email</td>
+              <td style="padding:10px 8px;font-size:14px"><a href="mailto:${email}" style="color:#2563eb">${email}</a></td>
+            </tr>
+            ${phone ? `<tr style="border-bottom:1px solid #f1f5f9"><td style="padding:10px 8px;font-weight:bold;color:#475569;font-size:14px">Phone</td><td style="padding:10px 8px;color:#0f172a;font-size:14px">${phone}</td></tr>` : ""}
+            ${subject ? `<tr style="border-bottom:1px solid #f1f5f9"><td style="padding:10px 8px;font-weight:bold;color:#475569;font-size:14px">Subject</td><td style="padding:10px 8px;color:#0f172a;font-size:14px">${subject}</td></tr>` : ""}
+            <tr>
+              <td style="padding:10px 8px;font-weight:bold;color:#475569;vertical-align:top;font-size:14px">Message</td>
+              <td style="padding:10px 8px;color:#0f172a;font-size:14px;line-height:1.6">${message.replace(/\n/g, "<br>")}</td>
+            </tr>
+          </table>
+          <div style="margin-top:20px;padding:12px 16px;background:#eff6ff;border-radius:6px;font-size:13px;color:#1e40af">
+            💡 Reply directly to this email to respond to ${name}.
+          </div>
+        </div>
+      </div>
+    `,
+  });
+
+  // ── Auto-reply to the visitor ────────────────────────────────────────
+  await transporter.sendMail({
+    from: `"NYC GravityNet" <${smtpUser}>`,
+    to: email,
+    subject: "We received your message – NYC GravityNet",
+    html: `
+      <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#f8fafc;padding:32px;border-radius:12px">
+        <div style="background:#1d4ed8;padding:20px 24px;border-radius:8px 8px 0 0">
+          <h1 style="color:#fff;margin:0;font-size:20px">Thank you, ${name}!</h1>
+        </div>
+        <div style="background:#fff;padding:24px;border-radius:0 0 8px 8px;border:1px solid #e2e8f0">
+          <p style="color:#334155;font-size:15px;line-height:1.6">
+            Thank you for reaching out to <strong>NYC GravityNet</strong>. We've received your inquiry and will get back to you within 1–2 business days.
+          </p>
+          <p style="color:#64748b;font-size:14px">Here's a copy of your message:</p>
+          <blockquote style="border-left:4px solid #2563eb;margin:12px 0;padding:12px 16px;background:#f8fafc;color:#475569;font-size:14px;line-height:1.6">
+            ${message.replace(/\n/g, "<br>")}
+          </blockquote>
+          <p style="color:#334155;font-size:14px;margin-top:24px">
+            Best regards,<br>
+            <strong>NYC GravityNet Team</strong><br>
+            <span style="color:#64748b">New York, USA</span>
+          </p>
+        </div>
+      </div>
+    `,
+  });
+
+  console.log(`[Contact] Emails sent successfully for submission from ${name} <${email}>`);
 
   redirect("/thank-you");
 }

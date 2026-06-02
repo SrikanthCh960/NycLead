@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowRight } from "lucide-react";
@@ -17,20 +17,41 @@ export default function Hero() {
   const [primaryPos, setPrimaryPos] = useState({ x: 0, y: 0 });
 
   const { scrollY } = useScroll();
-  const rawY = useTransform(scrollY, [0, 800], [0, 160]);
-  const y = useSpring(rawY, { stiffness: 60, damping: 20 });
-  const opacity = useTransform(scrollY, [0, 500], [1, 0]);
   // Parallax on background — moves slower than scroll
   const bgY = useTransform(scrollY, [0, 800], ["0%", "20%"]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Cinematic zoom-in on the banner
-      gsap.fromTo(
-        bgRef.current,
-        { scale: 1.18 },
-        { scale: 1, duration: 3.8, ease: "power3.out" }
-      );
+      // Premium continuous Ken Burns effect
+      const tl = gsap.timeline({
+        repeat: -1,
+        yoyo: true,
+      });
+
+      // Start slightly scaled and offset
+      gsap.set(bgRef.current, { scale: 1.2, x: "2%", y: "1.5%" });
+
+      tl.to(bgRef.current, {
+        scale: 1.1,
+        x: "-3%",
+        y: "-2.5%",
+        duration: 12,
+        ease: "sine.inOut",
+      })
+      .to(bgRef.current, {
+        scale: 1.25,
+        x: "3%",
+        y: "-1.5%",
+        duration: 13,
+        ease: "sine.inOut",
+      })
+      .to(bgRef.current, {
+        scale: 1.15,
+        x: "-1.5%",
+        y: "3%",
+        duration: 12,
+        ease: "sine.inOut",
+      });
     }, containerRef);
     return () => ctx.revert();
   }, []);
@@ -43,18 +64,22 @@ export default function Hero() {
     >
       {/* ── NYC Banner background with parallax ── */}
       <motion.div
-        ref={bgRef}
         style={{ y: bgY }}
-        className="absolute inset-0 z-0 will-change-transform"
+        className="absolute inset-0 z-0 will-change-transform overflow-hidden"
       >
-        <Image
-          src="/images/nyc-banner.avif"
-          alt="NYC GravityNet"
-          fill
-          priority
-          className="object-cover object-center"
-          sizes="100vw"
-        />
+        <div
+          ref={bgRef}
+          className="absolute inset-0 w-full h-full will-change-transform"
+        >
+          <Image
+            src="/images/nyc-banner.avif"
+            alt="NYC GravityNet"
+            fill
+            priority
+            className="object-cover object-center"
+            sizes="100vw"
+          />
+        </div>
       </motion.div>
 
       {/* ── Overlay layers ── */}
@@ -63,7 +88,7 @@ export default function Hero() {
         className="absolute inset-0 z-[1]"
         style={{
           background:
-            "linear-gradient(100deg, rgba(2,6,18,0.75) 0%, rgba(3,9,24,0.60) 38%, rgba(4,12,28,0.30) 65%, rgba(2,8,20,0.10) 100%)",
+            "linear-gradient(100deg, rgba(2,6,18,0.92) 0%, rgba(3,9,24,0.85) 38%, rgba(4,12,28,0.70) 65%, rgba(2,8,20,0.50) 100%)",
         }}
       />
       {/* Bottom fade */}
@@ -110,19 +135,18 @@ export default function Hero() {
         }}
       />
 
-      {/* ── Main content — full width, left-aligned ── */}
+      {/* ── Main content — centered ── */}
       <motion.div
-        style={{ y, opacity }}
-        className="relative z-20 max-w-7xl mx-auto px-6 lg:px-16 pt-32 pb-28 w-full"
+        className="relative z-20 max-w-5xl mx-auto px-4 sm:px-6 lg:px-12 pt-28 pb-24 w-full"
       >
-        <div className="max-w-3xl">
+        <div className="flex flex-col items-center text-center">
 
           {/* Badge */}
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.9 }}
-            className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full mb-10"
+            className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full mb-8"
             style={{
               background: "rgba(37,99,235,0.22)",
               border: "1px solid rgba(99,179,237,0.45)",
@@ -136,7 +160,7 @@ export default function Hero() {
           </motion.div>
 
           {/* Headline */}
-          <div className="mb-8">
+          <div className="mb-6">
             {headline.map((line, i) => (
               <div key={i} className="overflow-hidden">
                 <motion.div
@@ -149,8 +173,8 @@ export default function Hero() {
                   }}
                 >
                   <h1
-                    className={`font-extrabold leading-[1.04] tracking-[-0.028em]
-                      text-5xl md:text-6xl lg:text-7xl xl:text-[5.5rem]
+                    className={`font-extrabold leading-[1.08] tracking-[-0.024em]
+                      text-3xl sm:text-4xl md:text-5xl lg:text-6xl
                       ${i === 2
                         ? "gradient-text"
                         : "text-white"
@@ -171,7 +195,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.1, duration: 0.95 }}
-            className="text-slate-200 text-lg md:text-xl leading-[1.8] mb-12 max-w-xl font-[430]"
+            className="text-slate-200 text-sm sm:text-base md:text-lg leading-[1.8] mb-10 max-w-2xl font-[430]"
             style={{ textShadow: "0 1px 12px rgba(0,0,0,0.8)" }}
           >
             NYC GravityNet helps organizations secure, modernize, and scale
@@ -184,7 +208,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.28, duration: 0.85 }}
-            className="flex flex-wrap gap-4"
+            className="flex flex-wrap justify-center gap-4"
           >
             <motion.a
               href="#contact"
@@ -223,6 +247,7 @@ export default function Hero() {
       </motion.div>
 
       {/* Scroll indicator */}
+
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
