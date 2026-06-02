@@ -21,7 +21,8 @@ export async function submitContactForm(formData: FormData) {
   console.log("[Contact] ══════════════ RESEND DEBUG ══════════════");
   console.log("[Contact] API key present     :", !!apiKey);
   console.log("[Contact] API key prefix      :", apiKey ? apiKey.slice(0, 12) + "..." : "MISSING");
-  console.log("[Contact] to                  :", CONTACT_NOTIFICATION_EMAIL);
+  console.log("[Contact] CONTACT_NOTIFICATION_EMAIL env :", process.env.CONTACT_NOTIFICATION_EMAIL ?? "NOT SET — using fallback");
+  console.log("[Contact] to (resolved)       :", CONTACT_NOTIFICATION_EMAIL);
   console.log("[Contact] from                :", "NYC GravityNet <onboarding@resend.dev>");
   console.log("[Contact] subject             :", `New Inquiry${subject ? `: ${subject}` : ""} – NYC GravityNet`);
   console.log("[Contact] replyTo             :", email);
