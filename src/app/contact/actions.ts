@@ -31,7 +31,7 @@ export async function submitContactForm(formData: FormData) {
     const resend = new Resend(apiKey);
     const timestamp = new Date().toLocaleString("en-US", { timeZone: "America/New_York" });
     // ── Notification email to site owner ──────────────────────────────
-    await resend.emails.send({
+    const result = await resend.emails.send({
       from: "NYC GravityNet <onboarding@resend.dev>",
       to: [CONTACT_NOTIFICATION_EMAIL],
       replyTo: email,
@@ -66,6 +66,12 @@ export async function submitContactForm(formData: FormData) {
         </div>
       `,
     });
+
+    console.log("RESEND RESULT:", JSON.stringify(result, null, 2));
+    console.log("recipient email:", CONTACT_NOTIFICATION_EMAIL);
+    console.log("sender email:", "NYC GravityNet <onboarding@resend.dev>");
+    console.log("email id returned by Resend:", result.data?.id ?? "None");
+    console.log("any error returned by Resend:", result.error ? JSON.stringify(result.error, null, 2) : "None");
 
     // NOTE: Auto-reply to visitor is disabled until a custom domain is verified in Resend.
     // Once domain is added, uncomment and update the `from` address below.
