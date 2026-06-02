@@ -17,23 +17,28 @@ export async function submitContactForm(formData: FormData) {
 
   const apiKey = process.env.RESEND_API_KEY;
 
-  if (!apiKey || apiKey === "your_resend_api_key_here") {
-    console.error(
-      "[Contact] RESEND_API_KEY is not configured. " +
-      "Set RESEND_API_KEY in your environment variables. " +
-      "Submission details:",
-      { name, email, phone, subject, message }
-    );
+  // ── Log exact config being used ────────────────────────────────────────
+  console.log("[Contact] ══════════════ RESEND DEBUG ══════════════");
+  console.log("[Contact] API key present     :", !!apiKey);
+  console.log("[Contact] API key prefix      :", apiKey ? apiKey.slice(0, 12) + "..." : "MISSING");
+  console.log("[Contact] to                  :", CONTACT_NOTIFICATION_EMAIL);
+  console.log("[Contact] from                :", "NYC GravityNet <onboarding@resend.dev>");
+  console.log("[Contact] subject             :", `New Inquiry${subject ? `: ${subject}` : ""} – NYC GravityNet`);
+  console.log("[Contact] replyTo             :", email);
+  console.log("[Contact] ════════════════════════════════════════════");
+
+  if (!apiKey) {
+    console.error("[Contact] RESEND_API_KEY is missing from environment variables!");
     redirect("/thank-you");
   }
 
   try {
     const resend = new Resend(apiKey);
     const timestamp = new Date().toLocaleString("en-US", { timeZone: "America/New_York" });
-    // ── Notification email to site owner ──────────────────────────────
-    const result = await resend.emails.send({
-      from: "NYC GravityNet <onboarding@resend.dev>",
-      to: [CONTACT_NOTIFICATION_EMAIL],
+
+    const payload = {
+      from: "NYC GravityNet <onboarding@resend.dev>" as const,
+      to: [CONTACT_NOTIFICATION_EMAIL] as string[],
       replyTo: email,
       subject: `New Inquiry${subject ? `: ${subject}` : ""} – NYC GravityNet`,
       html: `
@@ -65,22 +70,27 @@ export async function submitContactForm(formData: FormData) {
           </div>
         </div>
       `,
-    });
+    };
 
-    console.log("RESEND RESULT:", JSON.stringify(result, null, 2));
-    console.log("recipient email:", CONTACT_NOTIFICATION_EMAIL);
-    console.log("sender email:", "NYC GravityNet <onboarding@resend.dev>");
-    console.log("email id returned by Resend:", result.data?.id ?? "None");
-    console.log("any error returned by Resend:", result.error ? JSON.stringify(result.error, null, 2) : "None");
+    console.log("[Contact] Calling resend.emails.send() now...");
+    const result = await resend.emails.send(payload);
 
-    // NOTE: Auto-reply to visitor is disabled until a custom domain is verified in Resend.
-    // Once domain is added, uncomment and update the `from` address below.
-    // await resend.emails.send({ from: "NYC GravityNet <noreply@yourdomain.com>", to: [email], ... });
+    console.log("[Contact] ══════════════ RESEND RESPONSE ══════════════");
+    console.log("[Contact] Full result         :", JSON.stringify(result, null, 2));
+    console.log("[Contact] result.data         :", JSON.stringify(result.data, null, 2));
+    console.log("[Contact] result.error        :", JSON.stringify(result.error, null, 2));
+    console.log("[Contact] Email ID            :", result.data?.id ?? "NO ID RETURNED");
+    console.log("[Contact] ════════════════════════════════════════════════");
 
-    console.log(`[Contact] Notification email sent via Resend for ${name} <${email}>`);
+    if (result.error) {
+      console.error("[Contact] Resend returned an error:", JSON.stringify(result.error, null, 2));
+    } else {
+      console.log("[Contact] ✅ Email accepted by Resend. ID:", result.data?.id);
+      console.log("[Contact] Delivered to:", CONTACT_NOTIFICATION_EMAIL);
+    }
+
   } catch (err) {
-    console.error("[Contact] Resend email failed:", err);
-    // Don't throw — still redirect to thank-you so the user isn't stuck
+    console.error("[Contact] Resend threw an exception:", err);
   }
 
   redirect("/thank-you");
