@@ -54,11 +54,21 @@ export default function Industries() {
   const inView = useInView(ref, { once: true, margin: "-10%" });
 
   return (
-    <section id="industries" ref={ref} className="relative py-32 bg-white overflow-hidden">
-      <div className="absolute top-0 left-0 right-0 h-px section-line" />
-
+    <section id="industries" ref={ref} className="relative py-32 overflow-hidden"
+      style={{ background: "linear-gradient(160deg, #020810 0%, #080f1e 50%, #020810 100%)" }}
+    >
+      <div
+        className="absolute inset-0 opacity-[0.04] pointer-events-none"
+        style={{
+          backgroundImage: "linear-gradient(rgba(37,99,235,0.8) 1px, transparent 1px), linear-gradient(90deg, rgba(37,99,235,0.8) 1px, transparent 1px)",
+          backgroundSize: "60px 60px",
+        }}
+      />
+      <div className="absolute top-0 left-0 right-0 h-px"
+        style={{ background: "linear-gradient(90deg, transparent, rgba(37,99,235,0.4), rgba(6,182,212,0.4), transparent)" }} />
       {/* Decorative center glow */}
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-blue-600/3 blur-3xl pointer-events-none" />
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full pointer-events-none"
+        style={{ background: "radial-gradient(circle, rgba(37,99,235,0.07) 0%, transparent 70%)", filter: "blur(40px)" }} />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12">
         {/* Header */}
@@ -67,10 +77,11 @@ export default function Industries() {
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full badge-on-light mb-8"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-8"
+            style={{ background: "rgba(37,99,235,0.14)", border: "1px solid rgba(37,99,235,0.32)" }}
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
-            <span className="text-blue-700 text-xs font-semibold tracking-[0.18em] uppercase">
+            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+            <span className="text-cyan-300 text-xs font-semibold tracking-[0.18em] uppercase">
               Industries
             </span>
           </motion.div>
@@ -80,7 +91,7 @@ export default function Industries() {
               initial={{ y: "100%", opacity: 0 }}
               animate={inView ? { y: 0, opacity: 1 } : {}}
               transition={{ delay: 0.1, duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 tracking-[-0.02em]"
+              className="text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-[-0.02em]"
             >
               Industry{" "}
               <span className="gradient-text-dark">Expertise</span>

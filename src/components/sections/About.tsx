@@ -1,21 +1,131 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useCallback } from "react";
 import Image from "next/image";
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useEffect } from "react";
-import { CheckCircle2, ArrowUpRight } from "lucide-react";
-
-gsap.registerPlugin(ScrollTrigger);
+import { motion, useInView, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
+import { CheckCircle2, ArrowUpRight, Target, Shield, TrendingUp, Users, ArrowRight } from "lucide-react";
 
 const pillars = [
-  { num: "01", title: "Strategic Vision", body: "We align every technology decision with your long-term business objectives, ensuring every solution compounds value over time." },
-  { num: "02", title: "Secure by Design", body: "Security isn't bolted on after the fact. It's woven into the fabric of every architecture, pipeline, and process we build." },
-  { num: "03", title: "Measurable Outcomes", body: "We track what matters. From cost reduction to revenue enablement, our engagements deliver quantifiable, board-level results." },
-  { num: "04", title: "Continuous Partnership", body: "We don't disappear after delivery. We evolve alongside your organization, adapting to every shift in the technology landscape." },
+  { num: "01", title: "Strategic Vision", body: "We align every technology decision with your long-term business objectives, ensuring every solution compounds value over time.", icon: Target, accent: "#2563eb", accentB: "#1e3a8a", accentRgb: "37,99,235" },
+  { num: "02", title: "Secure by Design", body: "Security isn't bolted on after the fact. It's woven into the fabric of every architecture, pipeline, and process we build.", icon: Shield, accent: "#06b6d4", accentB: "#2563eb", accentRgb: "6,182,212" },
+  { num: "03", title: "Measurable Outcomes", body: "We track what matters. From cost reduction to revenue enablement, our engagements deliver quantifiable, board-level results.", icon: TrendingUp, accent: "#38bdf8", accentB: "#0284c7", accentRgb: "56,189,248" },
+  { num: "04", title: "Continuous Partnership", body: "We don't disappear after delivery. We evolve alongside your organization, adapting to every shift in the technology landscape.", icon: Users, accent: "#3b82f6", accentB: "#06b6d4", accentRgb: "59,130,246" },
 ];
+
+function PillarCard({ num, title, body, icon: Icon, accent, accentB, accentRgb, index }: {
+  num: string; title: string; body: string; icon: React.ElementType;
+  accent: string; accentB: string; accentRgb: string; index: number;
+}) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [glowPos, setGlowPos] = useState({ x: 50, y: 50 });
+  const [hovered, setHovered] = useState(false);
+
+  const rawX = useMotionValue(0);
+  const rawY = useMotionValue(0);
+  const rotateX = useSpring(rawY, { stiffness: 180, damping: 28, mass: 0.6 });
+  const rotateY = useSpring(rawX, { stiffness: 180, damping: 28, mass: 0.6 });
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = cardRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const cx = e.clientX - rect.left;
+    const cy = e.clientY - rect.top;
+    const nx = (cx / rect.width - 0.5) * 2;
+    const ny = (cy / rect.height - 0.5) * 2;
+    rawX.set(nx * 6);
+    rawY.set(-ny * 6);
+    setGlowPos({ x: (cx / rect.width) * 100, y: (cy / rect.height) * 100 });
+  }, [rawX, rawY]);
+
+  const handleMouseLeave = useCallback(() => {
+    rawX.set(0);
+    rawY.set(0);
+    setHovered(false);
+  }, [rawX, rawY]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 40, scale: 0.96 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, margin: "-8%" }}
+      transition={{ delay: index * 0.1, duration: 0.75, ease: [0.25, 0.46, 0.45, 0.94] }}
+      style={{ perspective: 1000 }}
+    >
+      {/* Gradient border wrapper */}
+      <div
+        className="rounded-2xl p-[1.5px]"
+        style={{ background: hovered ? `linear-gradient(135deg, ${accent}55, ${accentB}33)` : "linear-gradient(135deg, rgba(37,99,235,0.14), rgba(6,182,212,0.10))" }}
+      >
+        <motion.div
+          ref={cardRef}
+          onMouseMove={handleMouseMove}
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={handleMouseLeave}
+          style={{
+            rotateX, rotateY,
+            transformStyle: "preserve-3d",
+            boxShadow: hovered ? `0 20px 60px rgba(${accentRgb},0.13), 0 4px 20px rgba(0,0,0,0.06)` : "0 2px 12px rgba(0,0,0,0.05)",
+          }}
+          className="rounded-[14px] overflow-hidden cursor-pointer transition-shadow duration-300 bg-white"
+        >
+          {/* Gradient icon header */}
+          <div
+            className="relative flex items-center justify-center"
+            style={{
+              height: 140,
+              background: "linear-gradient(135deg, #1e3a8a 0%, #2563eb 55%, #06b6d4 100%)",
+            }}
+          >
+            {/* Mouse-follow spotlight */}
+            <div
+              className="absolute inset-0 pointer-events-none transition-opacity duration-300"
+              style={{
+                background: `radial-gradient(320px circle at ${glowPos.x}% ${glowPos.y}%, rgba(255,255,255,0.12) 0%, transparent 65%)`,
+                opacity: hovered ? 1 : 0,
+              }}
+            />
+            {/* Number */}
+            <span className="absolute top-4 right-5 text-white/20 text-3xl font-black leading-none select-none">{num}</span>
+            {/* Icon box */}
+            <div
+              className="relative z-10 w-14 h-14 rounded-xl flex items-center justify-center"
+              style={{ background: "rgba(255,255,255,0.18)", border: "1px solid rgba(255,255,255,0.35)" }}
+            >
+              <Icon size={26} className="text-white" strokeWidth={1.8} />
+            </div>
+          </div>
+
+          {/* White content area */}
+          <div className="p-6 bg-white">
+            <h3 className="text-slate-900 font-bold text-[1rem] mb-3 leading-snug">{title}</h3>
+            <p className="text-slate-500 text-sm leading-[1.75] mb-5">{body}</p>
+
+            {/* Learn More CTA */}
+            <div className="flex items-center gap-1.5 overflow-hidden" style={{ color: "#2563eb" }}>
+              <span className="text-sm font-semibold">Learn More</span>
+              <div className="relative w-4 h-4 overflow-hidden">
+                <motion.div
+                  animate={hovered ? { x: [0, 18] } : { x: 0 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  className="absolute inset-0 flex items-center justify-center"
+                >
+                  <ArrowRight size={14} strokeWidth={2.5} />
+                </motion.div>
+                <motion.div
+                  animate={hovered ? { x: ["-100%", "0%"] } : { x: "-100%" }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  className="absolute inset-0 flex items-center justify-center"
+                >
+                  <ArrowRight size={14} strokeWidth={2.5} />
+                </motion.div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </motion.div>
+  );
+}
 
 const consultingPoints = [
   "Digital Strategy & Executive Roadmapping",
@@ -33,27 +143,12 @@ const impactStats = [
 export default function About() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const consultingRef = useRef<HTMLDivElement>(null);
-  const pillarsRef = useRef<HTMLDivElement>(null);
   const inView = useInView(sectionRef, { once: true, margin: "-15%" });
   const consultingInView = useInView(consultingRef, { once: true, margin: "-10%" });
 
   const { scrollYProgress } = useScroll({ target: consultingRef, offset: ["start end", "end start"] });
   const imgParallax = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"]);
   const bgParallax = useTransform(scrollYProgress, [0, 1], ["0%", "-6%"]);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        ".pillar-card",
-        { opacity: 0, y: 48, scale: 0.96 },
-        {
-          opacity: 1, y: 0, scale: 1, duration: 0.85, stagger: 0.12, ease: "power3.out",
-          scrollTrigger: { trigger: pillarsRef.current, start: "top 80%", once: true },
-        }
-      );
-    });
-    return () => ctx.revert();
-  }, []);
 
   return (
     <section id="about" ref={sectionRef} className="relative overflow-hidden">
@@ -135,17 +230,9 @@ export default function About() {
           </div>
 
           {/* Pillars */}
-          <div ref={pillarsRef} className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {pillars.map(({ num, title, body }) => (
-              <div
-                key={num}
-                className="pillar-card card-surface group relative rounded-2xl p-8 transition-all duration-500 overflow-hidden opacity-0"
-              >
-                <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-blue-600 to-cyan-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left rounded-b-full" />
-                <span className="block text-[2.8rem] font-black text-slate-100 leading-none mb-5 select-none group-hover:text-blue-50 transition-colors duration-300">{num}</span>
-                <h3 className="text-slate-900 font-semibold text-[0.95rem] mb-3 group-hover:text-blue-700 transition-colors duration-300">{title}</h3>
-                <p className="text-slate-500 text-sm leading-[1.75]">{body}</p>
-              </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {pillars.map((pillar, i) => (
+              <PillarCard key={pillar.num} {...pillar} index={i} />
             ))}
           </div>
         </div>

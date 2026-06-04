@@ -135,13 +135,21 @@ export default function WhyUs() {
                     initial={{ opacity: 0, y: 20, scale: 0.95 }}
                     animate={aiInView ? { opacity: 1, y: 0, scale: 1 } : {}}
                     transition={{ delay: 0.38 + i * 0.1, duration: 0.7 }}
-                    className="card-surface group rounded-2xl p-5 transition-all duration-400 hover:-translate-y-0.5"
+                    className="group relative rounded-2xl p-5 overflow-hidden transition-all duration-400 hover:-translate-y-1"
+                    style={{
+                      background: "linear-gradient(145deg, #0d1526 0%, #080f1e 100%)",
+                      border: "1px solid rgba(37,99,235,0.20)",
+                      boxShadow: "0 4px 20px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.04)",
+                    }}
                   >
-                    <div className="text-[1.8rem] font-bold text-slate-900 leading-none mb-1.5 group-hover:text-blue-700 transition-colors duration-300">
+                    <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500/40 to-transparent" />
+                    <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                      style={{ background: "radial-gradient(ellipse at 50% 0%, rgba(37,99,235,0.12) 0%, transparent 60%)" }} />
+                    <div className="text-[1.8rem] font-bold text-white leading-none mb-1.5 group-hover:text-cyan-300 transition-colors duration-300">
                       {value}
                     </div>
-                    <div className="text-slate-500 text-xs font-semibold mb-1">{label}</div>
-                    <div className="text-emerald-600 text-[10px] font-medium">{sub}</div>
+                    <div className="text-white/45 text-xs font-semibold mb-1">{label}</div>
+                    <div className="text-emerald-400 text-[10px] font-medium">{sub}</div>
                   </motion.div>
                 ))}
               </div>
@@ -535,17 +543,35 @@ export default function WhyUs() {
               {reasons.map(({ icon: Icon, title, body }, i) => (
                 <div
                   key={title}
-                  className="why-card card-surface group relative rounded-2xl p-8 transition-all duration-500 overflow-hidden opacity-0"
+                  className="why-card group relative rounded-2xl p-7 overflow-hidden transition-all duration-500 hover:-translate-y-1 opacity-0"
+                  style={{
+                    background: "linear-gradient(145deg, #0d1526 0%, #080f1e 100%)",
+                    border: "1px solid rgba(37,99,235,0.18)",
+                    boxShadow: "0 4px 24px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04)",
+                  }}
                 >
-                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-blue-600 to-cyan-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left rounded-b-full" />
-                  <div className="w-12 h-12 rounded-xl bg-blue-50 border border-blue-200/60 flex items-center justify-center mb-6 group-hover:bg-blue-100 group-hover:scale-110 transition-all duration-300">
-                    <Icon size={20} className="text-blue-600" />
+                  {/* Top gradient line */}
+                  <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500/40 to-transparent" />
+                  {/* Hover glow */}
+                  <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                    style={{ background: "radial-gradient(ellipse at 30% 0%, rgba(37,99,235,0.10) 0%, transparent 60%)" }} />
+
+                  {/* Icon badge */}
+                  <div
+                    className="w-11 h-11 rounded-xl flex items-center justify-center mb-5 transition-transform duration-300 group-hover:scale-110"
+                    style={{ background: "linear-gradient(135deg, rgba(37,99,235,0.25) 0%, rgba(6,182,212,0.15) 100%)", border: "1px solid rgba(37,99,235,0.35)" }}
+                  >
+                    <Icon size={18} style={{ color: "#60a5fa" }} strokeWidth={1.8} />
                   </div>
-                  <span className="absolute top-6 right-7 text-[2.8rem] font-black text-slate-100 leading-none select-none group-hover:text-blue-50 transition-colors duration-300">
+
+                  {/* Number */}
+                  <span className="absolute top-5 right-6 text-[2.5rem] font-black leading-none select-none"
+                    style={{ color: "rgba(37,99,235,0.12)" }}>
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <h3 className="text-slate-900 font-semibold text-[1.02rem] mb-3 group-hover:text-blue-700 transition-colors duration-300">{title}</h3>
-                  <p className="text-slate-500 text-sm leading-[1.78]">{body}</p>
+
+                  <h3 className="text-white font-semibold text-[0.97rem] mb-2.5 group-hover:text-cyan-300 transition-colors duration-300">{title}</h3>
+                  <p className="text-white/45 text-sm leading-[1.78]">{body}</p>
                 </div>
               ))}
             </div>
