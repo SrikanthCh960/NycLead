@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { useRef, useState, useCallback } from "react";
+import { motion, useInView, useMotionValue, useSpring, useTransform } from "framer-motion";
 
 const techRow1 = [
   { name: "Microsoft", abbr: "MS" },
@@ -30,15 +30,56 @@ const techRow2 = [
 ];
 
 function TechPill({ name, abbr }: { name: string; abbr: string }) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [hovered, setHovered] = useState(false);
+
+  const rawX = useMotionValue(0);
+  const rawY = useMotionValue(0);
+  const springConfig = { stiffness: 180, damping: 28, mass: 0.6 };
+  const rotateX = useSpring(useTransform(rawY, [-0.5, 0.5], [7, -7]), springConfig);
+  const rotateY = useSpring(useTransform(rawX, [-0.5, 0.5], [-7, 7]), springConfig);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = cardRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const nx = (e.clientX - rect.left) / rect.width - 0.5;
+    const ny = (e.clientY - rect.top) / rect.height - 0.5;
+    rawX.set(nx);
+    rawY.set(ny);
+  }, [rawX, rawY]);
+
+  const handleMouseLeave = useCallback(() => {
+    rawX.set(0);
+    rawY.set(0);
+    setHovered(false);
+  }, [rawX, rawY]);
+
   return (
-    <div className="group flex items-center gap-3 px-5 py-3 rounded-xl border border-slate-200 hover:border-blue-300 bg-white hover:bg-blue-50 transition-all duration-300 hover:-translate-y-0.5 cursor-default shrink-0 mx-2 hover:shadow-md">
+    <motion.div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={handleMouseLeave}
+      className="group relative flex items-center gap-3 px-5 py-3 rounded-xl border border-slate-200 bg-white shrink-0 mx-2 cursor-default will-change-transform overflow-hidden"
+      style={{
+        rotateX,
+        rotateY,
+        transformStyle: "preserve-3d",
+        borderColor: hovered ? "rgba(147, 197, 253, 1)" : "rgb(226, 232, 240)",
+        backgroundColor: hovered ? "rgba(239, 246, 255, 1)" : "white",
+        boxShadow: hovered ? "0 4px 12px rgba(0,0,0,0.1)" : "none",
+        transition: "border-color 0.3s, background-color 0.3s, box-shadow 0.3s",
+      }}
+      whileHover={{ y: -10, scale: 1.02 }}
+      transition={{ type: "spring", stiffness: 200, damping: 22 }}
+    >
       <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-100 to-slate-100 border border-blue-200/60 flex items-center justify-center shrink-0">
         <span className="text-[9px] font-bold text-blue-700 tracking-wide">{abbr}</span>
       </div>
       <span className="text-slate-600 text-sm font-medium group-hover:text-blue-700 transition-colors whitespace-nowrap">
         {name}
       </span>
-    </div>
+    </motion.div>
   );
 }
 

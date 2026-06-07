@@ -1,8 +1,8 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import Image from "next/image";
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import { motion, useInView, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Users, Lock, Zap, BookOpen, TrendingUp, HeadphonesIcon, Code2, GitBranch, Layers, ArrowUpRight, CheckCircle2 } from "lucide-react";
@@ -17,6 +17,176 @@ const reasons = [
   { icon: TrendingUp, title: "Scalable Solutions", body: "We architect for where you're going, not just where you are. Our solutions grow gracefully from startup scale to enterprise grade without costly rewrites." },
   { icon: HeadphonesIcon, title: "Dedicated Support", body: "Named account teams, 24/7 monitoring, and proactive optimization mean you're never left managing technology complexity on your own." },
 ];
+
+const cardColors = ["#2563eb", "#06b6d4", "#8b5cf6", "#22c55e", "#f59e0b", "#ef4444"];
+
+function WhyCard({
+  icon: Icon,
+  title,
+  body,
+  index,
+  inView,
+}: {
+  icon: React.ElementType;
+  title: string;
+  body: string;
+  index: number;
+  inView: boolean;
+}) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [hovered, setHovered] = useState(false);
+  const color = cardColors[index % cardColors.length];
+
+  const [glowPos, setGlowPos] = useState({ x: 50, y: 50 });
+
+  const rawX = useMotionValue(0);
+  const rawY = useMotionValue(0);
+  const springConfig = { stiffness: 180, damping: 28, mass: 0.6 };
+  const rotateX = useSpring(useTransform(rawY, [-0.5, 0.5], [7, -7]), springConfig);
+  const rotateY = useSpring(useTransform(rawX, [-0.5, 0.5], [-7, 7]), springConfig);
+  const glowX = useSpring(useTransform(rawX, [-0.5, 0.5], [20, 80]), springConfig);
+  const glowY = useSpring(useTransform(rawY, [-0.5, 0.5], [20, 80]), springConfig);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = cardRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const nx = (e.clientX - rect.left) / rect.width - 0.5;
+    const ny = (e.clientY - rect.top) / rect.height - 0.5;
+    rawX.set(nx);
+    rawY.set(ny);
+    setGlowPos({ x: ((e.clientX - rect.left) / rect.width) * 100, y: ((e.clientY - rect.top) / rect.height) * 100 });
+  }, [rawX, rawY]);
+
+  const handleMouseLeave = useCallback(() => {
+    rawX.set(0);
+    rawY.set(0);
+    setHovered(false);
+  }, [rawX, rawY]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 40, scale: 0.95 }}
+      animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
+      transition={{ delay: 0.15 + index * 0.1, duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
+      style={{ perspective: 800 }}
+    >
+      <motion.div
+        ref={cardRef}
+        onMouseMove={handleMouseMove}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={handleMouseLeave}
+        style={{
+          rotateX,
+          rotateY,
+          transformStyle: "preserve-3d",
+          background: "linear-gradient(145deg, #0d1526 0%, #080f1e 100%)",
+          border: `1px solid ${hovered ? `${color}40` : "rgba(37,99,235,0.18)"}`,
+          boxShadow: hovered
+            ? `0 8px 40px rgba(0,0,0,0.50), 0 0 30px ${color}18, inset 0 1px 0 rgba(255,255,255,0.05)`
+            : "0 4px 24px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04)",
+          transition: "border-color 0.3s, box-shadow 0.3s",
+        }}
+        whileHover={{ y: -10, scale: 1.02 }}
+        transition={{ type: "spring", stiffness: 200, damping: 22 }}
+        className="group relative rounded-2xl p-7 overflow-hidden cursor-default h-full will-change-transform"
+      >
+        {/* Shimmer sweep */}
+        <motion.div
+          className="absolute inset-0 pointer-events-none rounded-2xl"
+          initial={{ opacity: 0, x: "-100%" }}
+          animate={hovered ? { opacity: 1, x: "200%" } : { opacity: 0, x: "-100%" }}
+          transition={{ duration: 0.6, ease: "easeInOut" }}
+          style={{ background: `linear-gradient(105deg, transparent 40%, ${color}18 50%, transparent 60%)` }}
+        />
+
+        {/* Mouse-follow glow */}
+        {hovered && (
+          <motion.div
+            className="absolute inset-0 pointer-events-none rounded-2xl"
+            style={{
+              background: `radial-gradient(circle at ${glowPos.x}% ${glowPos.y}%, ${color}18 0%, transparent 65%)`,
+            }}
+          />
+        )}
+
+        {/* Top accent bar */}
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500/40 to-transparent" />
+        <motion.div
+          className="absolute top-0 left-8 right-8 h-[2px] rounded-b-full origin-center"
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: hovered ? 1 : 0 }}
+          transition={{ duration: 0.4 }}
+          style={{ background: `linear-gradient(90deg, transparent, ${color}, transparent)` }}
+        />
+
+        {/* Icon with pulse ring */}
+        <div className="relative mb-5 w-fit">
+          {hovered && (
+            <motion.div
+              className="absolute inset-0 rounded-xl"
+              initial={{ scale: 1, opacity: 0.5 }}
+              animate={{ scale: 1.7, opacity: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut", repeat: Infinity }}
+              style={{ backgroundColor: color }}
+            />
+          )}
+          <motion.div
+            className="w-11 h-11 rounded-xl flex items-center justify-center relative z-10"
+            animate={hovered ? { scale: 1.12, rotate: [0, -6, 6, 0] } : { scale: 1, rotate: 0 }}
+            transition={{ duration: 0.4 }}
+            style={{
+              background: `linear-gradient(135deg, ${color}30 0%, ${color}18 100%)`,
+              border: `1px solid ${color}50`,
+            }}
+          >
+            <Icon size={18} style={{ color }} strokeWidth={1.8} />
+          </motion.div>
+        </div>
+
+        {/* Number */}
+        <motion.span
+          className="absolute top-5 right-6 text-[2.5rem] font-black leading-none select-none"
+          animate={{ color: hovered ? `${color}25` : "rgba(37,99,235,0.12)" }}
+          transition={{ duration: 0.3 }}
+        >
+          {String(index + 1).padStart(2, "0")}
+        </motion.span>
+
+        <motion.h3
+          className="font-semibold text-[0.97rem] mb-2.5 transition-colors duration-300"
+          animate={{ color: hovered ? color : "#fff", x: hovered ? 3 : 0 }}
+          transition={{ duration: 0.25 }}
+        >
+          {title}
+        </motion.h3>
+        <p className="text-white/45 text-sm leading-[1.78]">{body}</p>
+
+        {/* Bottom glow line */}
+        <motion.div
+          className="absolute bottom-0 left-6 right-6 h-px"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: hovered ? 1 : 0 }}
+          transition={{ duration: 0.4 }}
+          style={{ background: `linear-gradient(90deg, transparent, ${color}60, transparent)` }}
+        />
+
+        {/* Corner dots */}
+        <motion.div
+          className="absolute top-3 right-3 w-1 h-1 rounded-full"
+          animate={{ opacity: hovered ? 1 : 0, scale: hovered ? 1 : 0 }}
+          transition={{ duration: 0.3 }}
+          style={{ backgroundColor: color }}
+        />
+        <motion.div
+          className="absolute bottom-3 left-3 w-1 h-1 rounded-full"
+          animate={{ opacity: hovered ? 1 : 0, scale: hovered ? 1 : 0 }}
+          transition={{ duration: 0.3, delay: 0.05 }}
+          style={{ backgroundColor: color }}
+        />
+      </motion.div>
+    </motion.div>
+  );
+}
 
 const aiHighlights = [
   { label: "Models Deployed", value: "24", sub: "+12% this quarter" },
@@ -62,15 +232,6 @@ export default function WhyUs() {
   const engParallax = useTransform(engScroll, [0, 1], ["-6%", "6%"]);
   const stratParallax = useTransform(stratScroll, [0, 1], ["-6%", "6%"]);
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo(".why-card", { opacity: 0, x: -30 }, {
-        opacity: 1, x: 0, stagger: 0.12, duration: 0.85, ease: "power3.out",
-        scrollTrigger: { trigger: whyRef.current, start: "top 78%", once: true },
-      });
-    });
-    return () => ctx.revert();
-  }, []);
 
   return (
     <section id="why" className="relative overflow-hidden">
@@ -540,39 +701,8 @@ export default function WhyUs() {
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {reasons.map(({ icon: Icon, title, body }, i) => (
-                <div
-                  key={title}
-                  className="why-card group relative rounded-2xl p-7 overflow-hidden transition-all duration-500 hover:-translate-y-1 opacity-0"
-                  style={{
-                    background: "linear-gradient(145deg, #0d1526 0%, #080f1e 100%)",
-                    border: "1px solid rgba(37,99,235,0.18)",
-                    boxShadow: "0 4px 24px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04)",
-                  }}
-                >
-                  {/* Top gradient line */}
-                  <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500/40 to-transparent" />
-                  {/* Hover glow */}
-                  <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                    style={{ background: "radial-gradient(ellipse at 30% 0%, rgba(37,99,235,0.10) 0%, transparent 60%)" }} />
-
-                  {/* Icon badge */}
-                  <div
-                    className="w-11 h-11 rounded-xl flex items-center justify-center mb-5 transition-transform duration-300 group-hover:scale-110"
-                    style={{ background: "linear-gradient(135deg, rgba(37,99,235,0.25) 0%, rgba(6,182,212,0.15) 100%)", border: "1px solid rgba(37,99,235,0.35)" }}
-                  >
-                    <Icon size={18} style={{ color: "#60a5fa" }} strokeWidth={1.8} />
-                  </div>
-
-                  {/* Number */}
-                  <span className="absolute top-5 right-6 text-[2.5rem] font-black leading-none select-none"
-                    style={{ color: "rgba(37,99,235,0.12)" }}>
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-
-                  <h3 className="text-white font-semibold text-[0.97rem] mb-2.5 group-hover:text-cyan-300 transition-colors duration-300">{title}</h3>
-                  <p className="text-white/45 text-sm leading-[1.78]">{body}</p>
-                </div>
+              {reasons.map(({ icon, title, body }, i) => (
+                <WhyCard key={title} icon={icon} title={title} body={body} index={i} inView={whyInView} />
               ))}
             </div>
           </div>

@@ -20,21 +20,21 @@ function PillarCard({ num, title, body, icon: Icon, accent, accentB, accentRgb, 
   const [glowPos, setGlowPos] = useState({ x: 50, y: 50 });
   const [hovered, setHovered] = useState(false);
 
+  // Spring-based 3D tilt
   const rawX = useMotionValue(0);
   const rawY = useMotionValue(0);
-  const rotateX = useSpring(rawY, { stiffness: 180, damping: 28, mass: 0.6 });
-  const rotateY = useSpring(rawX, { stiffness: 180, damping: 28, mass: 0.6 });
+  const springConfig = { stiffness: 180, damping: 28, mass: 0.6 };
+  const rotateX = useSpring(useTransform(rawY, [-0.5, 0.5], [7, -7]), springConfig);
+  const rotateY = useSpring(useTransform(rawX, [-0.5, 0.5], [-7, 7]), springConfig);
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     const rect = cardRef.current?.getBoundingClientRect();
     if (!rect) return;
-    const cx = e.clientX - rect.left;
-    const cy = e.clientY - rect.top;
-    const nx = (cx / rect.width - 0.5) * 2;
-    const ny = (cy / rect.height - 0.5) * 2;
-    rawX.set(nx * 6);
-    rawY.set(-ny * 6);
-    setGlowPos({ x: (cx / rect.width) * 100, y: (cy / rect.height) * 100 });
+    const nx = (e.clientX - rect.left) / rect.width - 0.5;
+    const ny = (e.clientY - rect.top) / rect.height - 0.5;
+    rawX.set(nx);
+    rawY.set(ny);
+    setGlowPos({ x: ((e.clientX - rect.left) / rect.width) * 100, y: ((e.clientY - rect.top) / rect.height) * 100 });
   }, [rawX, rawY]);
 
   const handleMouseLeave = useCallback(() => {
@@ -66,7 +66,9 @@ function PillarCard({ num, title, body, icon: Icon, accent, accentB, accentRgb, 
             transformStyle: "preserve-3d",
             boxShadow: hovered ? `0 20px 60px rgba(${accentRgb},0.13), 0 4px 20px rgba(0,0,0,0.06)` : "0 2px 12px rgba(0,0,0,0.05)",
           }}
-          className="rounded-[14px] overflow-hidden cursor-pointer transition-shadow duration-300 bg-white"
+          whileHover={{ y: -10, scale: 1.02 }}
+          transition={{ type: "spring", stiffness: 200, damping: 22 }}
+          className="rounded-[14px] overflow-hidden cursor-pointer transition-shadow duration-300 bg-white will-change-transform"
         >
           {/* Gradient icon header */}
           <div

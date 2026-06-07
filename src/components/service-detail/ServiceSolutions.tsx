@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useEffect } from "react";
-import { motion, useInView } from "framer-motion";
+import { useRef, useEffect, useState, useCallback } from "react";
+import { motion, useInView, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
@@ -24,6 +24,81 @@ const iconMap: Record<string, React.ElementType> = {
 gsap.registerPlugin(ScrollTrigger);
 
 type Props = { solutions: ServiceConfig["solutions"]; accent: string; accentRgb: string };
+
+function ServiceSolutionCard({ title, description, tags, iconName, index, accent, accentRgb }: any) {
+  const Icon = iconMap[iconName] ?? Shield;
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [hovered, setHovered] = useState(false);
+
+  const rawX = useMotionValue(0);
+  const rawY = useMotionValue(0);
+  const springConfig = { stiffness: 180, damping: 28, mass: 0.6 };
+  const rotateX = useSpring(useTransform(rawY, [-0.5, 0.5], [7, -7]), springConfig);
+  const rotateY = useSpring(useTransform(rawX, [-0.5, 0.5], [-7, 7]), springConfig);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = cardRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const nx = (e.clientX - rect.left) / rect.width - 0.5;
+    const ny = (e.clientY - rect.top) / rect.height - 0.5;
+    rawX.set(nx);
+    rawY.set(ny);
+  }, [rawX, rawY]);
+
+  const handleMouseLeave = useCallback(() => {
+    rawX.set(0);
+    rawY.set(0);
+    setHovered(false);
+  }, [rawX, rawY]);
+
+  return (
+    <motion.div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={handleMouseLeave}
+      className="sol-card opacity-0 group relative rounded-2xl p-8 overflow-hidden flex flex-col will-change-transform"
+      style={{
+        background: "rgba(255,255,255,0.025)",
+        border: `1px solid rgba(${accentRgb},0.18)`,
+        backdropFilter: "blur(10px)",
+        rotateX,
+        rotateY,
+        transformStyle: "preserve-3d",
+        boxShadow: hovered 
+          ? `0 20px 60px rgba(0,0,0,0.5), 0 0 30px rgba(${accentRgb},0.15), inset 0 1px 0 rgba(255,255,255,0.05)`
+          : "none",
+        transition: "box-shadow 0.3s",
+      }}
+      whileHover={{ y: -10, scale: 1.02 }}
+      transition={{ type: "spring", stiffness: 200, damping: 22 }}
+    >
+      <div className="absolute top-0 left-6 right-6 h-[2px] rounded-b-full scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center"
+        style={{ background: `linear-gradient(90deg,transparent,${accent},transparent)` }} />
+      <div className="absolute top-0 right-0 w-36 h-36 rounded-full pointer-events-none opacity-40 group-hover:opacity-70 transition-opacity duration-500"
+        style={{ background: `radial-gradient(circle,rgba(${accentRgb},0.12) 0%,transparent 70%)`, filter: "blur(16px)" }} />
+      <span className="absolute top-5 right-6 text-[3rem] font-black leading-none select-none opacity-[0.04] group-hover:opacity-[0.08] transition-opacity duration-500 text-white">
+        {String(index + 1).padStart(2, "0")}
+      </span>
+      <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-7 group-hover:scale-110 transition-transform duration-300"
+        style={{ background: `rgba(${accentRgb},0.12)`, border: `1px solid rgba(${accentRgb},0.25)` }}>
+        <Icon size={22} style={{ color: accent }} />
+      </div>
+      <h3 className="text-white font-semibold text-[1.04rem] leading-snug mb-3">{title}</h3>
+      <p className="text-white/44 text-sm leading-[1.82] flex-1 mb-6">{description}</p>
+      <div className="flex flex-wrap gap-1.5">
+        {tags.map((tag: string) => (
+          <span key={tag} className="text-[10px] font-semibold px-2.5 py-1 rounded-md"
+            style={{ background: `rgba(${accentRgb},0.10)`, color: accent, border: `1px solid rgba(${accentRgb},0.20)` }}>
+            {tag}
+          </span>
+        ))}
+      </div>
+      <div className="absolute bottom-0 left-6 right-6 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+        style={{ background: `linear-gradient(90deg,transparent,${accent}55,transparent)` }} />
+    </motion.div>
+  );
+}
 
 export default function ServiceSolutions({ solutions, accent, accentRgb }: Props) {
   const sectionRef = useRef<HTMLElement>(null);
@@ -105,56 +180,9 @@ export default function ServiceSolutions({ solutions, accent, accentRgb }: Props
 
         {/* Cards grid */}
         <div ref={gridRef} className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {solutions.map(({ iconName, title, description, tags }, i) => {
-            const Icon = iconMap[iconName] ?? Shield;
-            return (
-              <div
-                key={title}
-                className="sol-card opacity-0 group relative rounded-2xl p-8 overflow-hidden transition-all duration-500 hover:-translate-y-1 flex flex-col"
-                style={{
-                  background: "rgba(255,255,255,0.025)",
-                  border: `1px solid rgba(${accentRgb},0.18)`,
-                  backdropFilter: "blur(10px)",
-                }}
-              >
-                {/* Top accent bar */}
-                <div className="absolute top-0 left-6 right-6 h-[2px] rounded-b-full scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center"
-                  style={{ background: `linear-gradient(90deg,transparent,${accent},transparent)` }} />
-
-                {/* Corner glow */}
-                <div className="absolute top-0 right-0 w-36 h-36 rounded-full pointer-events-none opacity-40 group-hover:opacity-70 transition-opacity duration-500"
-                  style={{ background: `radial-gradient(circle,rgba(${accentRgb},0.12) 0%,transparent 70%)`, filter: "blur(16px)" }} />
-
-                {/* Number */}
-                <span className="absolute top-5 right-6 text-[3rem] font-black leading-none select-none opacity-[0.04] group-hover:opacity-[0.08] transition-opacity duration-500 text-white">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-
-                {/* Icon */}
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-7 group-hover:scale-110 transition-transform duration-300"
-                  style={{ background: `rgba(${accentRgb},0.12)`, border: `1px solid rgba(${accentRgb},0.25)` }}>
-                  <Icon size={22} style={{ color: accent }} />
-                </div>
-
-                <h3 className="text-white font-semibold text-[1.04rem] leading-snug mb-3">{title}</h3>
-                <p className="text-white/44 text-sm leading-[1.82] flex-1 mb-6">{description}</p>
-
-                {/* Tags */}
-                <div className="flex flex-wrap gap-1.5">
-                  {tags.map((tag) => (
-                    <span key={tag} className="text-[10px] font-semibold px-2.5 py-1 rounded-md"
-                      style={{ background: `rgba(${accentRgb},0.10)`, color: accent, border: `1px solid rgba(${accentRgb},0.20)` }}>
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-
-                {/* Bottom glow */}
-                <div className="absolute bottom-0 left-6 right-6 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                  style={{ background: `linear-gradient(90deg,transparent,${accent}55,transparent)` }} />
-              </div>
-            );
-          })}
+          {solutions.map((sol, i) => (
+            <ServiceSolutionCard key={sol.title} {...sol} index={i} accent={accent} accentRgb={accentRgb} />
+          ))}
         </div>
       </div>
     </section>

@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useEffect } from "react";
-import { motion, useInView } from "framer-motion";
+import { useRef, useEffect, useState, useCallback } from "react";
+import { motion, useInView, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
@@ -18,6 +18,78 @@ const iconMap: Record<string, React.ElementType> = {
 gsap.registerPlugin(ScrollTrigger);
 
 type Props = { benefits: ServiceConfig["benefits"]; accent: string; accentRgb: string };
+
+function BenefitCard({ iconName, stat, title, description, color }: any) {
+  const Icon = iconMap[iconName] ?? TrendingUp;
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [hovered, setHovered] = useState(false);
+
+  const rawX = useMotionValue(0);
+  const rawY = useMotionValue(0);
+  const springConfig = { stiffness: 180, damping: 28, mass: 0.6 };
+  const rotateX = useSpring(useTransform(rawY, [-0.5, 0.5], [7, -7]), springConfig);
+  const rotateY = useSpring(useTransform(rawX, [-0.5, 0.5], [-7, 7]), springConfig);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = cardRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const nx = (e.clientX - rect.left) / rect.width - 0.5;
+    const ny = (e.clientY - rect.top) / rect.height - 0.5;
+    rawX.set(nx);
+    rawY.set(ny);
+  }, [rawX, rawY]);
+
+  const handleMouseLeave = useCallback(() => {
+    rawX.set(0);
+    rawY.set(0);
+    setHovered(false);
+  }, [rawX, rawY]);
+
+  return (
+    <motion.div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={handleMouseLeave}
+      className="ben-card opacity-0 group relative card-surface rounded-2xl p-8 overflow-hidden cursor-default will-change-transform"
+      style={{
+        rotateX,
+        rotateY,
+        transformStyle: "preserve-3d",
+        borderColor: hovered ? `${color}80` : "rgba(226, 232, 240, 1)",
+        boxShadow: hovered ? `0 12px 30px rgba(0,0,0,0.08), 0 0 20px ${color}22` : "none",
+        transition: "border-color 0.3s, box-shadow 0.3s",
+      }}
+      whileHover={{ y: -10, scale: 1.02 }}
+      transition={{ type: "spring", stiffness: 200, damping: 22 }}
+    >
+      <div className="absolute top-0 left-6 right-6 h-[2px] rounded-b-full scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center"
+        style={{ background: `linear-gradient(90deg,transparent,${color},transparent)` }} />
+
+      {/* Stat watermark */}
+      <span className="absolute top-4 right-6 text-[2.5rem] font-black leading-none select-none opacity-[0.06] group-hover:opacity-[0.12] transition-opacity duration-500"
+        style={{ color }}>
+        {stat}
+      </span>
+
+      <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300"
+        style={{ background: `${color}12`, border: `1px solid ${color}22` }}>
+        <Icon size={20} style={{ color }} />
+      </div>
+
+      {/* Stat */}
+      <div className="text-[2.2rem] font-bold leading-none mb-2 transition-colors duration-300"
+        style={{ color }}>
+        {stat}
+      </div>
+
+      <h3 className="text-slate-900 font-semibold text-[1.02rem] mb-3 group-hover:text-blue-700 transition-colors duration-300">
+        {title}
+      </h3>
+      <p className="text-slate-500 text-sm leading-[1.78]">{description}</p>
+    </motion.div>
+  );
+}
 
 export default function ServiceBenefits({ benefits, accent, accentRgb }: Props) {
   const sectionRef = useRef<HTMLElement>(null);
@@ -90,40 +162,9 @@ export default function ServiceBenefits({ benefits, accent, accentRgb }: Props) 
 
         {/* Benefit cards */}
         <div ref={gridRef} className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {benefits.map(({ iconName, stat, title, description, color }) => {
-            const Icon = iconMap[iconName] ?? TrendingUp;
-            return (
-              <div
-                key={title}
-                className="ben-card opacity-0 group relative card-surface rounded-2xl p-8 overflow-hidden transition-all duration-500"
-              >
-                <div className="absolute top-0 left-6 right-6 h-[2px] rounded-b-full scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center"
-                  style={{ background: `linear-gradient(90deg,transparent,${color},transparent)` }} />
-
-                {/* Stat watermark */}
-                <span className="absolute top-4 right-6 text-[2.5rem] font-black leading-none select-none opacity-[0.06] group-hover:opacity-[0.12] transition-opacity duration-500"
-                  style={{ color }}>
-                  {stat}
-                </span>
-
-                <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300"
-                  style={{ background: `${color}12`, border: `1px solid ${color}22` }}>
-                  <Icon size={20} style={{ color }} />
-                </div>
-
-                {/* Stat */}
-                <div className="text-[2.2rem] font-bold leading-none mb-2 transition-colors duration-300"
-                  style={{ color }}>
-                  {stat}
-                </div>
-
-                <h3 className="text-slate-900 font-semibold text-[1.02rem] mb-3 group-hover:text-blue-700 transition-colors duration-300">
-                  {title}
-                </h3>
-                <p className="text-slate-500 text-sm leading-[1.78]">{description}</p>
-              </div>
-            );
-          })}
+          {benefits.map((benefit) => (
+            <BenefitCard key={benefit.title} {...benefit} />
+          ))}
         </div>
       </div>
     </section>

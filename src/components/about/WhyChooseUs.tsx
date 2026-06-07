@@ -1,8 +1,8 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import Image from "next/image";
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import { motion, useInView, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { CheckCircle2, ArrowUpRight, Medal, Clock, BarChart2, Building2 } from "lucide-react";
@@ -34,6 +34,68 @@ const achievements = [
   { icon: BarChart2, value: "340%",    label: "Avg. ROI on AI Engagements"   },
   { icon: Building2, value: "Fortune 500", label: "Enterprise Clients Served" },
 ];
+
+function AchievementCard({ icon: Icon, value, label }: any) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [hovered, setHovered] = useState(false);
+
+  const rawX = useMotionValue(0);
+  const rawY = useMotionValue(0);
+  const springConfig = { stiffness: 180, damping: 28, mass: 0.6 };
+  const rotateX = useSpring(useTransform(rawY, [-0.5, 0.5], [7, -7]), springConfig);
+  const rotateY = useSpring(useTransform(rawX, [-0.5, 0.5], [-7, 7]), springConfig);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = cardRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const nx = (e.clientX - rect.left) / rect.width - 0.5;
+    const ny = (e.clientY - rect.top) / rect.height - 0.5;
+    rawX.set(nx);
+    rawY.set(ny);
+  }, [rawX, rawY]);
+
+  const handleMouseLeave = useCallback(() => {
+    rawX.set(0);
+    rawY.set(0);
+    setHovered(false);
+  }, [rawX, rawY]);
+
+  return (
+    <motion.div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={handleMouseLeave}
+      className="achieve-card opacity-0 group relative rounded-2xl p-6 overflow-hidden will-change-transform"
+      style={{
+        background: "rgba(255,255,255,0.028)",
+        border: "1px solid rgba(37,99,235,0.18)",
+        backdropFilter: "blur(10px)",
+        rotateX,
+        rotateY,
+        transformStyle: "preserve-3d",
+        boxShadow: hovered 
+          ? "0 20px 60px rgba(0,0,0,0.5), 0 0 30px rgba(37,99,235,0.15), inset 0 1px 0 rgba(255,255,255,0.05)"
+          : "none",
+        transition: "box-shadow 0.3s",
+      }}
+      whileHover={{ y: -10, scale: 1.02 }}
+      transition={{ type: "spring", stiffness: 200, damping: 22 }}
+    >
+      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-blue-600 to-cyan-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left rounded-b-full" />
+      <div
+        className="w-10 h-10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300"
+        style={{ background: "rgba(37,99,235,0.14)", border: "1px solid rgba(37,99,235,0.25)" }}
+      >
+        <Icon size={17} className="text-cyan-400" />
+      </div>
+      <div className="text-[1.75rem] font-bold text-white leading-none mb-1.5 group-hover:text-cyan-300 transition-colors duration-300">
+        {value}
+      </div>
+      <div className="text-white/40 text-xs font-medium">{label}</div>
+    </motion.div>
+  );
+}
 
 export default function AboutWhyUs() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -229,28 +291,8 @@ export default function AboutWhyUs() {
 
         {/* Achievement stat cards */}
         <div ref={statsRef} className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {achievements.map(({ icon: Icon, value, label }) => (
-            <div
-              key={label}
-              className="achieve-card opacity-0 group relative rounded-2xl p-6 overflow-hidden transition-all duration-500 hover:-translate-y-0.5"
-              style={{
-                background: "rgba(255,255,255,0.028)",
-                border: "1px solid rgba(37,99,235,0.18)",
-                backdropFilter: "blur(10px)",
-              }}
-            >
-              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-blue-600 to-cyan-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left rounded-b-full" />
-              <div
-                className="w-10 h-10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300"
-                style={{ background: "rgba(37,99,235,0.14)", border: "1px solid rgba(37,99,235,0.25)" }}
-              >
-                <Icon size={17} className="text-cyan-400" />
-              </div>
-              <div className="text-[1.75rem] font-bold text-white leading-none mb-1.5 group-hover:text-cyan-300 transition-colors duration-300">
-                {value}
-              </div>
-              <div className="text-white/40 text-xs font-medium">{label}</div>
-            </div>
+          {achievements.map((achieve) => (
+            <AchievementCard key={achieve.label} {...achieve} />
           ))}
         </div>
       </div>

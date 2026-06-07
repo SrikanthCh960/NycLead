@@ -1,9 +1,9 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
@@ -55,9 +55,7 @@ const services: Service[] = [
     title: "Cloud & DevOps Solutions",
     shortDesc:
       "Modernize infrastructure and accelerate delivery with scalable, resilient cloud architectures and automated CI/CD pipelines.",
-    icon: Cloud,
-    iconBg: "rgba(37,99,235,0.12)",
-    iconColor: "#2563eb",
+    image: "/images/technology-consulting-platform.png",
     accent: "#2563eb",
     accentSoft: "rgba(37,99,235,0.10)",
     accentBorder: "rgba(37,99,235,0.22)",
@@ -68,9 +66,7 @@ const services: Service[] = [
     title: "Custom Software Development",
     shortDesc:
       "Build secure, scalable, and performant applications tailored precisely to your business needs and growth trajectory.",
-    icon: Code2,
-    iconBg: "rgba(167,139,250,0.12)",
-    iconColor: "#a78bfa",
+    image: "/images/software-engineering-collaboration.jpeg",
     accent: "#a78bfa",
     accentSoft: "rgba(167,139,250,0.10)",
     accentBorder: "rgba(167,139,250,0.22)",
@@ -81,9 +77,7 @@ const services: Service[] = [
     title: "Data & Analytics",
     shortDesc:
       "Transform raw data into actionable business intelligence with modern data platforms, pipelines, and predictive analytics.",
-    icon: BarChart3,
-    iconBg: "rgba(245,158,11,0.12)",
-    iconColor: "#f59e0b",
+    image: "/images/services-innovation-center.png",
     accent: "#f59e0b",
     accentSoft: "rgba(245,158,11,0.10)",
     accentBorder: "rgba(245,158,11,0.22)",
@@ -94,9 +88,7 @@ const services: Service[] = [
     title: "Digital Transformation Consulting",
     shortDesc:
       "Develop comprehensive strategies and technology roadmaps that drive long-term business growth and competitive advantage.",
-    icon: Layers,
-    iconBg: "rgba(34,197,94,0.12)",
-    iconColor: "#22c55e",
+    image: "/images/technology-strategy-workshop.png",
     accent: "#22c55e",
     accentSoft: "rgba(34,197,94,0.10)",
     accentBorder: "rgba(34,197,94,0.22)",
@@ -107,16 +99,62 @@ const services: Service[] = [
 function ServiceCard({ service, index }: { service: Service; index: number }) {
   const hasImage = Boolean(service.image);
 
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [hovered, setHovered] = useState(false);
+  const [glowPos, setGlowPos] = useState({ x: 50, y: 50 });
+
+  const rawX = useMotionValue(0);
+  const rawY = useMotionValue(0);
+  const springConfig = { stiffness: 180, damping: 28, mass: 0.6 };
+  const rotateX = useSpring(useTransform(rawY, [-0.5, 0.5], [7, -7]), springConfig);
+  const rotateY = useSpring(useTransform(rawX, [-0.5, 0.5], [-7, 7]), springConfig);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = cardRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const nx = (e.clientX - rect.left) / rect.width - 0.5;
+    const ny = (e.clientY - rect.top) / rect.height - 0.5;
+    rawX.set(nx);
+    rawY.set(ny);
+    setGlowPos({ x: ((e.clientX - rect.left) / rect.width) * 100, y: ((e.clientY - rect.top) / rect.height) * 100 });
+  }, [rawX, rawY]);
+
+  const handleMouseLeave = useCallback(() => {
+    rawX.set(0);
+    rawY.set(0);
+    setHovered(false);
+  }, [rawX, rawY]);
+
   return (
     <motion.div
-      className="svc-card opacity-0 group relative rounded-2xl overflow-hidden flex flex-col transition-all duration-500 hover:-translate-y-1"
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={handleMouseLeave}
+      className="svc-card opacity-0 group relative rounded-2xl overflow-hidden flex flex-col will-change-transform"
       style={{
         background: "rgba(255,255,255,0.025)",
         border: `1px solid ${service.accentBorder}`,
         backdropFilter: "blur(10px)",
-        boxShadow: "0 4px 24px rgba(0,0,0,0.28)",
+        boxShadow: hovered 
+          ? `0 20px 60px rgba(0,0,0,0.5), 0 0 30px ${service.accentSoft}, inset 0 1px 0 rgba(255,255,255,0.05)`
+          : "0 4px 24px rgba(0,0,0,0.28)",
+        rotateX,
+        rotateY,
+        transformStyle: "preserve-3d",
+        transition: "border 0.3s, box-shadow 0.3s",
       }}
+      whileHover={{ y: -10, scale: 1.02 }}
+      transition={{ type: "spring", stiffness: 200, damping: 22 }}
     >
+      {hovered && (
+        <motion.div
+          className="absolute inset-0 pointer-events-none z-10"
+          style={{
+            background: `radial-gradient(circle at ${glowPos.x}% ${glowPos.y}%, ${service.accentSoft} 0%, transparent 65%)`,
+          }}
+        />
+      )}
       {/* ── Card Header: image OR icon ── */}
       <div className="relative overflow-hidden" style={{ aspectRatio: hasImage ? "16/9" : "auto" }}>
         {hasImage ? (

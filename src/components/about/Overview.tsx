@@ -1,8 +1,8 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import Image from "next/image";
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import { motion, useInView, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { CheckCircle2, ArrowUpRight, Award, Globe2, Users2, TrendingUp } from "lucide-react";
@@ -22,6 +22,67 @@ const milestones = [
   { icon: Users2,    value: "1,200+",label: "Technology Professionals" },
   { icon: TrendingUp,value: "$2.1B+",label: "Client Value Delivered" },
 ];
+
+function MilestoneCard({ icon: Icon, value, label }: { icon: React.ElementType; value: string; label: string }) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [hovered, setHovered] = useState(false);
+
+  const rawX = useMotionValue(0);
+  const rawY = useMotionValue(0);
+  const springCfg = { stiffness: 180, damping: 28, mass: 0.6 };
+  const rotateX = useSpring(useTransform(rawY, [-0.5, 0.5], [7, -7]), springCfg);
+  const rotateY = useSpring(useTransform(rawX, [-0.5, 0.5], [-7, 7]), springCfg);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = cardRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    rawX.set((e.clientX - rect.left) / rect.width - 0.5);
+    rawY.set((e.clientY - rect.top) / rect.height - 0.5);
+  }, [rawX, rawY]);
+
+  const handleMouseLeave = useCallback(() => {
+    rawX.set(0);
+    rawY.set(0);
+    setHovered(false);
+  }, [rawX, rawY]);
+
+  return (
+    <motion.div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={handleMouseLeave}
+      className="milestone-card opacity-0 group relative card-surface rounded-2xl px-7 py-7 overflow-hidden cursor-default will-change-transform"
+      style={{
+        rotateX,
+        rotateY,
+        transformStyle: "preserve-3d",
+        borderColor: hovered ? "rgba(37,99,235,0.25)" : undefined,
+        boxShadow: hovered ? "0 12px 30px rgba(0,0,0,0.08), 0 0 20px rgba(37,99,235,0.08)" : undefined,
+        transition: "border-color 0.3s, box-shadow 0.3s",
+      }}
+      whileHover={{ y: -10, scale: 1.02 }}
+      transition={{ type: "spring", stiffness: 200, damping: 22 }}
+    >
+      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-blue-600 to-cyan-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left rounded-b-full" />
+      <motion.div
+        className="w-11 h-11 rounded-xl bg-blue-50 border border-blue-200/60 flex items-center justify-center mb-5 transition-colors duration-300"
+        animate={hovered ? { scale: 1.12 } : { scale: 1 }}
+        transition={{ duration: 0.3 }}
+        style={{ backgroundColor: hovered ? "rgb(219,234,254)" : undefined }}
+      >
+        <Icon size={18} className="text-blue-600" />
+      </motion.div>
+      <div
+        className="text-[2rem] font-bold text-slate-900 leading-none mb-2 transition-colors duration-300"
+        style={{ color: hovered ? "#2563eb" : undefined }}
+      >
+        {value}
+      </div>
+      <div className="text-slate-500 text-sm font-medium leading-snug">{label}</div>
+    </motion.div>
+  );
+}
 
 export default function AboutOverview() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -221,19 +282,7 @@ export default function AboutOverview() {
         {/* ── Milestone stats row ── */}
         <div ref={cardsRef} className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {milestones.map(({ icon: Icon, value, label }) => (
-            <div
-              key={label}
-              className="milestone-card opacity-0 group relative card-surface rounded-2xl px-7 py-7 overflow-hidden transition-all duration-500"
-            >
-              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-blue-600 to-cyan-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left rounded-b-full" />
-              <div className="w-11 h-11 rounded-xl bg-blue-50 border border-blue-200/60 flex items-center justify-center mb-5 group-hover:scale-110 group-hover:bg-blue-100 transition-all duration-300">
-                <Icon size={18} className="text-blue-600" />
-              </div>
-              <div className="text-[2rem] font-bold text-slate-900 leading-none mb-2 group-hover:text-blue-700 transition-colors duration-300">
-                {value}
-              </div>
-              <div className="text-slate-500 text-sm font-medium leading-snug">{label}</div>
-            </div>
+            <MilestoneCard key={label} icon={Icon} value={value} label={label} />
           ))}
         </div>
       </div>

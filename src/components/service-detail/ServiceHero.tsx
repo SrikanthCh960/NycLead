@@ -25,6 +25,26 @@ export default function ServiceHero({ config, slug }: Props) {
       className="relative min-h-screen flex items-center overflow-hidden"
       style={{ background: "linear-gradient(155deg,#020810 0%,#050d1d 52%,#030912 100%)" }}
     >
+      {/* Full-screen background image */}
+      {config.image && (
+        <motion.div style={{ y: imgY }} className="absolute inset-0 pointer-events-none">
+          <Image
+            src={config.image}
+            alt={config.title}
+            fill
+            className="object-cover"
+            priority
+            sizes="100vw"
+          />
+          {/* Dark overlay so text stays readable */}
+          <div className="absolute inset-0"
+            style={{ background: `linear-gradient(155deg,rgba(2,8,16,0.88) 0%,rgba(5,13,29,0.78) 50%,rgba(3,9,18,0.85) 100%)` }} />
+          {/* Accent tint overlay */}
+          <div className="absolute inset-0"
+            style={{ background: `radial-gradient(ellipse at 30% 50%,rgba(${accentRgb},0.12) 0%,transparent 60%)` }} />
+        </motion.div>
+      )}
+
       {/* Grid texture */}
       <div className="absolute inset-0 opacity-[0.042] pointer-events-none"
         style={{
@@ -68,164 +88,75 @@ export default function ServiceHero({ config, slug }: Props) {
           <span style={{ color: accent }}>{config.badge}</span>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-14 xl:gap-20 items-center">
+        <div className="max-w-3xl">
 
-          {/* LEFT — Content */}
-          <motion.div style={{ y: textY }}>
-            {/* Service badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1, duration: 0.7 }}
-              className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full mb-8"
-              style={{ background: `rgba(${accentRgb},0.12)`, border: `1px solid rgba(${accentRgb},0.28)` }}
-            >
-              <span className="w-1.5 h-1.5 rounded-full pulse-glow" style={{ background: accent }} />
-              <span className="text-xs font-semibold tracking-[0.18em] uppercase" style={{ color: accent }}>
-                {config.badge}
-              </span>
-            </motion.div>
-
-            {/* Headline */}
-            <div className="overflow-hidden mb-8">
-              <motion.h1
-                initial={{ y: "100%", opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.2, duration: 1.05, ease: [0.25, 0.46, 0.45, 0.94] }}
-                className="text-4xl md:text-5xl lg:text-[3.4rem] xl:text-[3.8rem] font-bold text-white leading-[1.07] tracking-[-0.028em]"
-              >
-                {config.title}
-              </motion.h1>
-            </div>
-
-            {/* Subtitle */}
-            <motion.p
-              initial={{ opacity: 0, y: 22 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.38, duration: 0.95 }}
-              className="text-white/52 text-[1.05rem] leading-[1.88] mb-12 max-w-[520px]"
-            >
-              {config.subtitle}
-            </motion.p>
-
-            {/* CTAs */}
-            <motion.div
-              initial={{ opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.55, duration: 0.85 }}
-              className="flex flex-wrap items-center gap-4"
-            >
-              <a
-                href="#contact"
-                className="btn-shine group inline-flex items-center gap-2.5 px-8 py-3.5 rounded-xl font-semibold text-sm text-white transition-all duration-300 hover:-translate-y-0.5"
-                style={{
-                  background: `linear-gradient(135deg,rgba(${accentRgb},1) 0%,#2563eb 100%)`,
-                  boxShadow: `0 0 0 0 rgba(${accentRgb},0)`,
-                }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.boxShadow = `0 8px 40px rgba(${accentRgb},0.42)`;
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.boxShadow = `0 0 0 0 rgba(${accentRgb},0)`;
-                }}
-              >
-                {config.ctaText}
-                <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform duration-300" />
-              </a>
-              <Link
-                href="/services"
-                className="group inline-flex items-center gap-2 text-white/50 hover:text-white/80 font-medium text-sm transition-colors duration-300"
-              >
-                <ArrowLeft size={13} className="group-hover:-translate-x-0.5 transition-transform duration-300" />
-                All Services
-              </Link>
-            </motion.div>
+          {/* Service badge */}
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1, duration: 0.7 }}
+            className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full mb-8"
+            style={{ background: `rgba(${accentRgb},0.12)`, border: `1px solid rgba(${accentRgb},0.28)` }}
+          >
+            <span className="w-1.5 h-1.5 rounded-full pulse-glow" style={{ background: accent }} />
+            <span className="text-xs font-semibold tracking-[0.18em] uppercase" style={{ color: accent }}>
+              {config.badge}
+            </span>
           </motion.div>
 
-          {/* RIGHT — Image or Illustration */}
-          <motion.div
-            initial={{ opacity: 0, x: 55 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.28, duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="relative"
+          {/* Headline */}
+          <div className="overflow-hidden mb-8">
+            <motion.h1
+              initial={{ y: "100%", opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.2, duration: 1.05, ease: [0.25, 0.46, 0.45, 0.94] }}
+              className="text-4xl md:text-5xl lg:text-[3.4rem] xl:text-[3.8rem] font-bold text-white leading-[1.07] tracking-[-0.028em]"
+            >
+              {config.title}
+            </motion.h1>
+          </div>
+
+          {/* Subtitle */}
+          <motion.p
+            initial={{ opacity: 0, y: 22 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.38, duration: 0.95 }}
+            className="text-white/60 text-[1.05rem] leading-[1.88] mb-12 max-w-[580px]"
           >
-            {config.image ? (
-              <motion.div style={{ y: imgY }} className="relative">
-                {/* Halo */}
-                <div className="absolute inset-[-14%] rounded-[3rem] pointer-events-none"
-                  style={{
-                    background: `radial-gradient(ellipse at 50% 55%,rgba(${accentRgb},0.22) 0%,rgba(37,99,235,0.08) 52%,transparent 70%)`,
-                    filter: "blur(32px)",
-                  }} />
+            {config.subtitle}
+          </motion.p>
 
-                <div className="relative rounded-2xl overflow-hidden"
-                  style={{ boxShadow: `0 0 0 1px rgba(${accentRgb},0.20),0 48px 120px rgba(0,0,0,0.75),0 0 80px rgba(${accentRgb},0.08)` }}>
-                  <Image
-                    src={config.image}
-                    alt={config.title}
-                    width={720}
-                    height={510}
-                    className="w-full h-auto object-cover"
-                    priority
-                    sizes="(max-width:1024px) 100vw,52vw"
-                  />
-                  <div className="absolute inset-0 pointer-events-none"
-                    style={{ background: `linear-gradient(160deg,rgba(${accentRgb},0.04) 0%,transparent 42%,rgba(2,6,15,0.40) 100%)` }} />
-                </div>
-
-                {/* Live badge */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.82 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 1.0, duration: 0.7, ease: [0.16,1,0.3,1] }}
-                  className="absolute top-5 left-5 z-10 flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold"
-                  style={{
-                    background: "rgba(3,8,22,0.90)",
-                    backdropFilter: "blur(14px)",
-                    border: `1px solid rgba(${accentRgb},0.28)`,
-                    color: accent,
-                  }}
-                >
-                  <span className="w-1.5 h-1.5 rounded-full pulse-glow" style={{ background: accent }} />
-                  {config.badge}
-                </motion.div>
-              </motion.div>
-            ) : (
-              /* No-image: premium icon illustration */
-              <motion.div style={{ y: imgY }} className="relative flex items-center justify-center">
-                <div className="absolute inset-[-10%] rounded-[3rem] pointer-events-none"
-                  style={{
-                    background: `radial-gradient(ellipse at 50% 50%,rgba(${accentRgb},0.18) 0%,rgba(37,99,235,0.06) 50%,transparent 70%)`,
-                    filter: "blur(32px)",
-                  }} />
-                <div className="relative w-full aspect-square max-w-[440px] rounded-3xl flex flex-col items-center justify-center gap-8 p-12"
-                  style={{
-                    background: "rgba(255,255,255,0.025)",
-                    border: `1px solid rgba(${accentRgb},0.22)`,
-                    backdropFilter: "blur(12px)",
-                    boxShadow: `0 40px 100px rgba(0,0,0,0.55), 0 0 60px rgba(${accentRgb},0.06)`,
-                  }}>
-                  {/* Large accent number */}
-                  <div className="text-[7rem] font-black leading-none select-none"
-                    style={{ color: `rgba(${accentRgb},0.12)` }}>
-                    NYC
-                  </div>
-                  <div className="text-center">
-                    <div className="text-white font-bold text-xl mb-2">{config.badge}</div>
-                    <div className="text-white/40 text-sm leading-relaxed max-w-xs">{config.subtitle.slice(0, 80)}…</div>
-                  </div>
-                  {/* Decorative dots */}
-                  <div className="flex gap-2">
-                    {[0,1,2,3,4].map(i => (
-                      <motion.div key={i} animate={{ opacity: [0.2,0.8,0.2] }}
-                        transition={{ duration: 2, repeat: Infinity, delay: i*0.3 }}
-                        className="w-1.5 h-1.5 rounded-full"
-                        style={{ background: accent }} />
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            )}
+          {/* CTAs */}
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.55, duration: 0.85 }}
+            className="flex flex-wrap items-center gap-4"
+          >
+            <a
+              href="#contact"
+              className="btn-shine group inline-flex items-center gap-2.5 px-8 py-3.5 rounded-xl font-semibold text-sm text-white transition-all duration-300 hover:-translate-y-0.5"
+              style={{
+                background: `linear-gradient(135deg,rgba(${accentRgb},1) 0%,#2563eb 100%)`,
+                boxShadow: `0 0 0 0 rgba(${accentRgb},0)`,
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.boxShadow = `0 8px 40px rgba(${accentRgb},0.42)`;
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.boxShadow = `0 0 0 0 rgba(${accentRgb},0)`;
+              }}
+            >
+              {config.ctaText}
+              <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform duration-300" />
+            </a>
+            <Link
+              href="/services"
+              className="group inline-flex items-center gap-2 text-white/50 hover:text-white/80 font-medium text-sm transition-colors duration-300"
+            >
+              <ArrowLeft size={13} className="group-hover:-translate-x-0.5 transition-transform duration-300" />
+              All Services
+            </Link>
           </motion.div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useEffect } from "react";
-import { motion, useInView } from "framer-motion";
+import { useRef, useEffect, useState, useCallback } from "react";
+import { motion, useInView, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Target, Eye, Compass, Lightbulb, ShieldCheck, Handshake } from "lucide-react";
@@ -43,6 +43,107 @@ const principles = [
   { icon: Lightbulb,  label: "Bold Innovation", desc: "We challenge the status quo to unlock new possibilities." },
   { icon: Handshake,  label: "Trusted Partnership", desc: "Long-term relationships built on transparency and results." },
 ];
+
+function MVVCard({
+  icon: Icon, tag, heading, body, accent, accentSoft, accentBorder,
+}: {
+  icon: React.ElementType; tag: string; heading: string; body: string;
+  accent: string; accentSoft: string; accentBorder: string;
+}) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [hovered, setHovered] = useState(false);
+  const [glowPos, setGlowPos] = useState({ x: 50, y: 50 });
+
+  const rawX = useMotionValue(0);
+  const rawY = useMotionValue(0);
+  const springCfg = { stiffness: 180, damping: 28, mass: 0.6 };
+  const rotateX = useSpring(useTransform(rawY, [-0.5, 0.5], [7, -7]), springCfg);
+  const rotateY = useSpring(useTransform(rawX, [-0.5, 0.5], [-7, 7]), springCfg);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = cardRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    rawX.set((e.clientX - rect.left) / rect.width - 0.5);
+    rawY.set((e.clientY - rect.top) / rect.height - 0.5);
+    setGlowPos({ x: ((e.clientX - rect.left) / rect.width) * 100, y: ((e.clientY - rect.top) / rect.height) * 100 });
+  }, [rawX, rawY]);
+
+  const handleMouseLeave = useCallback(() => {
+    rawX.set(0);
+    rawY.set(0);
+    setHovered(false);
+  }, [rawX, rawY]);
+
+  return (
+    <motion.div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={handleMouseLeave}
+      className="mvv-card opacity-0 group relative rounded-2xl p-8 overflow-hidden cursor-default will-change-transform"
+      style={{
+        background: "rgba(255,255,255,0.025)",
+        border: `1px solid ${accentBorder}`,
+        backdropFilter: "blur(12px)",
+        rotateX,
+        rotateY,
+        transformStyle: "preserve-3d",
+        boxShadow: hovered
+          ? `0 20px 60px rgba(0,0,0,0.5), 0 0 30px ${accentSoft}, inset 0 1px 0 rgba(255,255,255,0.05)`
+          : "none",
+        transition: "box-shadow 0.3s",
+      }}
+      whileHover={{ y: -10, scale: 1.02 }}
+      transition={{ type: "spring", stiffness: 200, damping: 22 }}
+    >
+      {/* Mouse-follow glow */}
+      {hovered && (
+        <div
+          className="absolute inset-0 pointer-events-none rounded-2xl"
+          style={{
+            background: `radial-gradient(circle at ${glowPos.x}% ${glowPos.y}%, ${accentSoft} 0%, transparent 65%)`,
+          }}
+        />
+      )}
+
+      {/* Inner corner glow */}
+      <div
+        className="absolute top-0 right-0 w-40 h-40 rounded-full pointer-events-none transition-opacity duration-500 opacity-60 group-hover:opacity-100"
+        style={{ background: `radial-gradient(circle, ${accentSoft} 0%, transparent 70%)`, filter: "blur(20px)" }}
+      />
+
+      {/* Top accent bar */}
+      <div
+        className="absolute top-0 left-8 right-8 h-[2px] rounded-b-full scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center"
+        style={{ background: `linear-gradient(90deg, transparent, ${accent}, transparent)` }}
+      />
+
+      {/* Icon */}
+      <motion.div
+        className="w-12 h-12 rounded-xl flex items-center justify-center mb-7"
+        animate={hovered ? { scale: 1.12 } : { scale: 1 }}
+        transition={{ duration: 0.3 }}
+        style={{ background: accentSoft, border: `1px solid ${accentBorder}` }}
+      >
+        <Icon size={22} style={{ color: accent }} />
+      </motion.div>
+
+      {/* Tag */}
+      <div className="text-[10px] font-bold uppercase tracking-[0.18em] mb-3" style={{ color: accent }}>
+        {tag}
+      </div>
+
+      <h3 className="text-white font-semibold text-[1.05rem] leading-snug mb-4">{heading}</h3>
+      <p className="text-white/45 text-sm leading-[1.82]">{body}</p>
+
+      {/* Bottom glow */}
+      <div
+        className="absolute bottom-0 left-6 right-6 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+        style={{ background: `linear-gradient(90deg, transparent, ${accent}55, transparent)` }}
+      />
+    </motion.div>
+  );
+}
 
 export default function AboutMission() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -140,48 +241,8 @@ export default function AboutMission() {
 
         {/* MVV Cards */}
         <div ref={cardsRef} className="grid md:grid-cols-3 gap-6 mb-20">
-          {cards.map(({ icon: Icon, tag, heading, body, accent, accentSoft, accentBorder }) => (
-            <div
-              key={tag}
-              className="mvv-card opacity-0 group relative rounded-2xl p-8 overflow-hidden transition-all duration-500 hover:-translate-y-1"
-              style={{
-                background: "rgba(255,255,255,0.025)",
-                border: `1px solid ${accentBorder}`,
-                backdropFilter: "blur(12px)",
-              }}
-            >
-              {/* Inner corner glow */}
-              <div
-                className="absolute top-0 right-0 w-40 h-40 rounded-full pointer-events-none transition-opacity duration-500 opacity-60 group-hover:opacity-100"
-                style={{ background: `radial-gradient(circle, ${accentSoft} 0%, transparent 70%)`, filter: "blur(20px)" }}
-              />
-              {/* Top accent bar */}
-              <div
-                className="absolute top-0 left-8 right-8 h-[2px] rounded-b-full scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center"
-                style={{ background: `linear-gradient(90deg, transparent, ${accent}, transparent)` }}
-              />
-
-              {/* Icon */}
-              <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center mb-7 group-hover:scale-110 transition-transform duration-300"
-                style={{ background: accentSoft, border: `1px solid ${accentBorder}` }}
-              >
-                <Icon size={22} style={{ color: accent }} />
-              </div>
-
-              {/* Tag */}
-              <div
-                className="text-[10px] font-bold uppercase tracking-[0.18em] mb-3"
-                style={{ color: accent }}
-              >
-                {tag}
-              </div>
-
-              <h3 className="text-white font-semibold text-[1.05rem] leading-snug mb-4">
-                {heading}
-              </h3>
-              <p className="text-white/45 text-sm leading-[1.82]">{body}</p>
-            </div>
+          {cards.map((card) => (
+            <MVVCard key={card.tag} {...card} />
           ))}
         </div>
 
