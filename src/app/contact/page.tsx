@@ -6,6 +6,10 @@ import { Mail, MapPin, Phone, ArrowRight, Clock, Calendar, Sparkles } from "luci
 import { submitContactForm } from "./actions";
 import { CONTACT_EMAIL, CONTACT_LOCATION } from "@/lib/contact-config";
 
+import SmoothScroll from "@/components/layout/SmoothScroll";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
+
 /* ── Reusable 3D-tilt hook ────────────────────────────────────────────── */
 function useTilt() {
   const ref = useRef<HTMLDivElement>(null);
@@ -203,10 +207,12 @@ export default function ContactPage() {
   const inView = useInView(headerRef, { once: true, margin: "-10%" });
 
   return (
-    <main
-      className="min-h-screen pt-28 pb-24 relative overflow-hidden"
-      style={{ background: "linear-gradient(180deg, #f8fafc 0%, #ffffff 40%, #f8fafc 100%)" }}
-    >
+    <SmoothScroll>
+      <Navbar />
+      <main
+        className="min-h-screen pt-28 pb-24 relative overflow-hidden"
+        style={{ background: "linear-gradient(180deg, #f8fafc 0%, #ffffff 40%, #f8fafc 100%)" }}
+      >
       {/* Ambient decorations */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div
@@ -403,6 +409,8 @@ export default function ContactPage() {
           </motion.div>
         </div>
       </div>
-    </main>
+      </main>
+      <Footer />
+    </SmoothScroll>
   );
 }

@@ -528,55 +528,55 @@ function ServiceCard(props: typeof services[0] & { index: number }) {
                 transition={{ duration: 0.3 }}
               />
 
-            {/* CTA */}
-            <div className="flex items-center justify-between">
-              <Link href={`/services/${slug}`} className="group/btn flex items-center gap-2.5">
-                <div
-                  className="relative overflow-hidden flex items-center gap-2 text-[0.78rem] font-bold tracking-wide uppercase"
-                  style={{ color: accent }}
-                >
-                  <span>Explore Service</span>
-                  {/* Animated arrow cluster */}
-                  <div className="relative w-4 h-4 overflow-hidden">
-                    <motion.div
-                      animate={{ x: hovered ? [0, 18] : 0 }}
-                      transition={{ duration: 0.25, ease: "easeIn" }}
-                      className="absolute inset-0 flex items-center"
-                    >
-                      <ArrowRight size={14} strokeWidth={2.5} />
-                    </motion.div>
-                    <motion.div
-                      animate={{ x: hovered ? ["-100%", "0%"] : "-100%" }}
-                      transition={{ duration: 0.25, ease: "easeOut", delay: hovered ? 0.05 : 0 }}
-                      className="absolute inset-0 flex items-center"
-                    >
-                      <ArrowRight size={14} strokeWidth={2.5} />
-                    </motion.div>
+              {/* CTA */}
+              <div className="flex items-center justify-between">
+                <Link href={`/services/${slug}`} className="group/btn flex items-center gap-2.5">
+                  <div
+                    className="relative overflow-hidden flex items-center gap-2 text-[0.78rem] font-bold tracking-wide uppercase"
+                    style={{ color: accent }}
+                  >
+                    <span>Explore Service</span>
+                    {/* Animated arrow cluster */}
+                    <div className="relative w-4 h-4 overflow-hidden">
+                      <motion.div
+                        animate={{ x: hovered ? [0, 18] : 0 }}
+                        transition={{ duration: 0.25, ease: "easeIn" }}
+                        className="absolute inset-0 flex items-center"
+                      >
+                        <ArrowRight size={14} strokeWidth={2.5} />
+                      </motion.div>
+                      <motion.div
+                        animate={{ x: hovered ? ["-100%", "0%"] : "-100%" }}
+                        transition={{ duration: 0.25, ease: "easeOut", delay: hovered ? 0.05 : 0 }}
+                        className="absolute inset-0 flex items-center"
+                      >
+                        <ArrowRight size={14} strokeWidth={2.5} />
+                      </motion.div>
+                    </div>
                   </div>
-                </div>
-              </Link>
+                </Link>
 
-              {/* Accent icon badge */}
-              <motion.div
-                animate={{
-                  background: hovered
-                    ? `rgba(${accentRgb}, 0.18)`
-                    : `rgba(${accentRgb}, 0.08)`,
-                  borderColor: hovered
-                    ? `rgba(${accentRgb}, 0.4)`
-                    : `rgba(${accentRgb}, 0.18)`,
-                  boxShadow: hovered
-                    ? `0 0 16px rgba(${accentRgb}, 0.25)`
-                    : "none",
-                }}
-                transition={{ duration: 0.35 }}
-                className="w-9 h-9 rounded-xl flex items-center justify-center border"
-              >
-                <Icon size={15} style={{ color: accent }} strokeWidth={1.8} />
-              </motion.div>
+                {/* Accent icon badge */}
+                <motion.div
+                  animate={{
+                    background: hovered
+                      ? `rgba(${accentRgb}, 0.18)`
+                      : `rgba(${accentRgb}, 0.08)`,
+                    borderColor: hovered
+                      ? `rgba(${accentRgb}, 0.4)`
+                      : `rgba(${accentRgb}, 0.18)`,
+                    boxShadow: hovered
+                      ? `0 0 16px rgba(${accentRgb}, 0.25)`
+                      : "none",
+                  }}
+                  transition={{ duration: 0.35 }}
+                  className="w-9 h-9 rounded-xl flex items-center justify-center border"
+                >
+                  <Icon size={15} style={{ color: accent }} strokeWidth={1.8} />
+                </motion.div>
+              </div>
             </div>
           </div>
-        </div>
 
           {/* Bottom edge glow on hover */}
           <motion.div
@@ -802,7 +802,7 @@ export default function Services() {
                   }}
                 >
                   <Image
-                    src="/images/cybersecurity-command-center.png"
+                    src="/images/software.jpg"
                     alt="Cybersecurity Command Center — 24/7 Monitoring"
                     width={660}
                     height={440}

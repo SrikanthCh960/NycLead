@@ -6,7 +6,6 @@ import StatsStrip from "@/components/sections/StatsStrip";
 import About from "@/components/sections/About";
 import Services from "@/components/sections/Services";
 import WhyUs from "@/components/sections/WhyUs";
-import Industries from "@/components/sections/Industries";
 import TechEcosystem from "@/components/sections/TechEcosystem";
 import Clients from "@/components/sections/Clients";
 import CTA from "@/components/sections/CTA";
@@ -21,7 +20,6 @@ export default function Home() {
         <About />
         <Services />
         <WhyUs />
-        <Industries />
         <TechEcosystem />
         <Clients />
         <CTA />

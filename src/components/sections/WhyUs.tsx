@@ -343,11 +343,11 @@ export default function WhyUs() {
                   }}
                 >
                   <Image
-                    src="/images/ai-operations-dashboard.png"
+                    src="/images/languages.jpg"
                     alt="AI Operations Dashboard"
                     width={660}
                     height={440}
-                    className="w-full h-auto object-cover"
+                    className="w-full h-full object-cover"
                     sizes="(max-width: 1024px) 100vw, 50vw"
                   />
                   {/* Subtle highlight */}

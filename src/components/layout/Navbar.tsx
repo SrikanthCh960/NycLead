@@ -10,7 +10,6 @@ const navLinks = [
   { label: "Home",       href: "/"             },
   { label: "About",      href: "/about"         },
   { label: "Services",   href: "/services"      },
-  { label: "Industries", href: "/#industries"   },
   { label: "Contact",    href: "/contact"       },
 ];
 
@@ -65,7 +64,7 @@ export default function Navbar() {
               >
                 <Link
                   href={href}
-                  className={`text-sm font-medium transition-colors duration-300 relative group ${
+                  className={`text-base font-medium transition-colors duration-300 relative group ${
                     scrolled
                       ? "text-white/70 hover:text-white"
                       : "text-white/90 hover:text-white"
@@ -85,7 +84,7 @@ export default function Navbar() {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8, duration: 0.6 }}
-              className="btn-shine px-5 py-2.5 text-sm font-semibold rounded-lg bg-blue-600 hover:bg-blue-500 text-white transition-all duration-300 hover:shadow-[0_4px_20px_rgba(37,99,235,0.45)]"
+              className="btn-shine px-5 py-2.5 text-base font-semibold rounded-lg bg-blue-600 hover:bg-blue-500 text-white transition-all duration-300 hover:shadow-[0_4px_20px_rgba(37,99,235,0.45)]"
             >
               Schedule Consultation
             </motion.a>
