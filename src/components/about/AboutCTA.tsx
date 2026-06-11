@@ -9,7 +9,7 @@ const ctaOptions = [
     icon: Calendar,
     title: "Schedule a Consultation",
     sub: "30-min strategy session — no commitment required.",
-    href: "mailto:hello@nycgravitynet.com",
+    href: "/contact",
     primary: true,
   },
   {

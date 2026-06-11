@@ -2,8 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { Globe, Share2, ExternalLink, Mail, Phone, MapPin, ArrowUpRight } from "lucide-react";
+import { motion, useScroll, useMotionValueEvent } from "framer-motion";
+import { Globe, Share2, ExternalLink, Mail, Phone, MapPin, ArrowUpRight, ChevronUp } from "lucide-react";
+import { useState } from "react";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -28,9 +29,9 @@ const socials = [
 ];
 
 const contactItems = [
-  { icon: MapPin, text: "New York City, NY 10001" },
-  { icon: Phone, text: "+1 (212) 555-0100" },
-  { icon: Mail, text: "hello@nycgravitynet.com" },
+  { icon: MapPin, text: "NYC GRAVITYNET LLC\n445 Broadhollow Rd, Suite 210\nMelville, NY 11747" },
+  { icon: Phone, text: "631-390-8621" },
+  { icon: Mail, text: "Info@nycgravitynet.com" },
 ];
 
 const staggerContainer = {
@@ -59,6 +60,17 @@ function AnimatedLink({ href, children }: { href: string; children: React.ReactN
 }
 
 export default function Footer() {
+  const [visible, setVisible] = useState(false);
+  const { scrollY } = useScroll();
+
+  useMotionValueEvent(scrollY, "change", (y) => {
+    setVisible(y > 300);
+  });
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <footer className="relative bg-slate-50 border-t border-black/[0.06] overflow-hidden">
       {/* Top gradient accent */}
@@ -88,7 +100,7 @@ export default function Footer() {
           <motion.div variants={fadeUp} className="lg:col-span-1">
             <Link href="/">
               <Image
-                src="/images/nyc-logo.avif"
+                src="/images/nyc-logo-blue.png"
                 alt="NYC GravityNet"
                 width={140}
                 height={48}
@@ -154,7 +166,7 @@ export default function Footer() {
                   <div className="w-7 h-7 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0 mt-0.5">
                     <Icon size={13} className="text-blue-600" />
                   </div>
-                  <span className="leading-snug pt-1">{text}</span>
+                  <span className="leading-snug pt-1 whitespace-pre-line">{text}</span>
                 </li>
               ))}
             </ul>
@@ -191,6 +203,29 @@ export default function Footer() {
           </div>
         </motion.div>
       </div>
+
+      {/* Scroll to top button */}
+      <motion.button
+        onClick={scrollToTop}
+        aria-label="Scroll to top"
+        initial={false}
+        animate={visible ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 20, scale: 0.85 }}
+        transition={{ type: "spring", stiffness: 300, damping: 22 }}
+        whileHover={{ scale: 1.12, y: -4 }}
+        whileTap={{ scale: 0.93 }}
+        className="fixed bottom-8 right-8 z-50 w-12 h-12 rounded-2xl flex items-center justify-center shadow-[0_8px_32px_rgba(37,99,235,0.35)] pointer-events-auto"
+        style={{
+          background: "linear-gradient(135deg, #2563eb 0%, #06b6d4 100%)",
+          pointerEvents: visible ? "auto" : "none",
+        }}
+      >
+        <motion.span
+          animate={visible ? { y: [0, -3, 0] } : { y: 0 }}
+          transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut", repeatDelay: 1 }}
+        >
+          <ChevronUp size={20} className="text-white" strokeWidth={2.5} />
+        </motion.span>
+      </motion.button>
     </footer>
   );
 }

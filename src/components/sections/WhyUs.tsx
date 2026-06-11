@@ -660,18 +660,6 @@ export default function WhyUs() {
                   </motion.div>
                 ))}
               </div>
-
-              <motion.a
-                href="#contact"
-                initial={{ opacity: 0, y: 16 }}
-                animate={stratInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: 0.78, duration: 0.75 }}
-                className="group inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl font-semibold text-sm text-white transition-all duration-300 hover:shadow-[0_8px_40px_rgba(37,99,235,0.35)] hover:-translate-y-0.5"
-                style={{ background: "linear-gradient(135deg,#2563eb 0%,#06b6d4 100%)" }}
-              >
-                Schedule a Strategy Call
-                <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
-              </motion.a>
             </div>
           </div>
 

@@ -133,11 +133,10 @@ function ServiceCard({ service, index }: { service: Service; index: number }) {
       onMouseLeave={handleMouseLeave}
       className="svc-card opacity-0 group relative rounded-2xl overflow-hidden flex flex-col will-change-transform"
       style={{
-        background: "rgba(255,255,255,0.025)",
-        border: `1px solid ${service.accentBorder}`,
-        backdropFilter: "blur(10px)",
-        boxShadow: hovered 
-          ? `0 20px 60px rgba(0,0,0,0.5), 0 0 30px ${service.accentSoft}, inset 0 1px 0 rgba(255,255,255,0.05)`
+        background: "rgba(255,255,255,0.04)",
+        border: `1px solid ${hovered ? service.accentBorder : "rgba(255,255,255,0.08)"}`,
+        boxShadow: hovered
+          ? `0 20px 60px rgba(0,0,0,0.5), 0 0 30px ${service.accentSoft}`
           : "0 4px 24px rgba(0,0,0,0.28)",
         rotateX,
         rotateY,
@@ -239,12 +238,12 @@ function ServiceCard({ service, index }: { service: Service; index: number }) {
         </div>
 
         {/* Title */}
-        <h3 className="font-bold text-white text-[1.08rem] leading-snug mb-3 transition-colors duration-300">
+        <h3 className="font-bold text-white text-[1.08rem] leading-snug mb-3 transition-colors duration-300 group-hover:text-cyan-300">
           {service.title}
         </h3>
 
         {/* Description */}
-        <p className="text-white/45 text-sm leading-[1.82] flex-1 mb-7">
+        <p className="text-white/50 text-sm leading-[1.82] flex-1 mb-7">
           {service.shortDesc}
         </p>
 
@@ -296,28 +295,18 @@ export default function ServicesGrid() {
       id="services-grid"
       ref={sectionRef}
       className="relative overflow-hidden"
-      style={{ background: "linear-gradient(160deg,#030912 0%,#060d1e 55%,#040b18 100%)" }}
+      style={{ background: "linear-gradient(160deg,#05101f 0%,#091528 40%,#0a1a30 70%,#071220 100%)" }}
     >
-      {/* Grid texture */}
-      <div
-        className="absolute inset-0 opacity-[0.04] pointer-events-none"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(37,99,235,0.7) 1px,transparent 1px), linear-gradient(90deg,rgba(37,99,235,0.7) 1px,transparent 1px)",
-          backgroundSize: "64px 64px",
-        }}
-      />
-
       {/* Ambient glows */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute left-1/4 top-0 w-[600px] h-[600px] rounded-full"
-          style={{ background: "radial-gradient(circle,rgba(37,99,235,0.08) 0%,transparent 68%)", filter: "blur(40px)" }} />
-        <div className="absolute right-1/4 bottom-0 w-[500px] h-[500px] rounded-full"
-          style={{ background: "radial-gradient(circle,rgba(6,182,212,0.06) 0%,transparent 68%)", filter: "blur(36px)" }} />
+        <div className="absolute right-0 top-1/3 w-[700px] h-[700px] rounded-full"
+          style={{ background: "radial-gradient(circle,rgba(37,99,235,0.034) 0%,transparent 68%)" }} />
+        <div className="absolute left-0 bottom-1/4 w-[500px] h-[500px] rounded-full"
+          style={{ background: "radial-gradient(circle,rgba(6,182,212,0.03) 0%,transparent 68%)" }} />
       </div>
 
       <div className="absolute top-0 left-0 right-0 h-px"
-        style={{ background: "linear-gradient(90deg,transparent,rgba(37,99,235,0.5),rgba(6,182,212,0.35),transparent)" }} />
+        style={{ background: "linear-gradient(90deg,transparent,rgba(37,99,235,0.16),transparent)" }} />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 py-36">
 
@@ -350,7 +339,7 @@ export default function ServicesGrid() {
             initial={{ opacity: 0, y: 18 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.3, duration: 0.9 }}
-            className="text-white/46 text-[1.04rem] leading-[1.85]"
+            className="text-white/50 text-[1.04rem] leading-[1.85]"
           >
             Six specialised practice areas, one unified team — working together
             to accelerate your digital future.

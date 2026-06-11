@@ -106,7 +106,7 @@ export default function ServicesCTA() {
         >
           {/* Magnetic primary button */}
           <motion.a
-            href="mailto:hello@nycgravitynet.com"
+            href="/contact"
             onMouseMove={(e) => {
               const r = e.currentTarget.getBoundingClientRect();
               setMagnet({

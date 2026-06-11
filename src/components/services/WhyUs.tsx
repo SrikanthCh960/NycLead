@@ -83,13 +83,15 @@ function WhyServiceCard({ icon: Icon, title, body, accent, index }: any) {
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={handleMouseLeave}
-      className={`why-svc-card opacity-0 group relative card-surface rounded-2xl p-8 overflow-hidden cursor-default will-change-transform ${index === 4 ? "lg:col-start-2" : ""}`}
+      className={`why-svc-card opacity-0 group relative rounded-2xl p-8 overflow-hidden cursor-default will-change-transform ${index === 4 ? "lg:col-start-2" : ""}`}
       style={{
         rotateX,
         rotateY,
         transformStyle: "preserve-3d",
-        borderColor: hovered ? `${accent}80` : "rgba(226, 232, 240, 1)",
-        boxShadow: hovered ? `0 12px 30px rgba(0,0,0,0.08), 0 0 20px ${accent}22` : "none",
+        background: "#ffffff",
+        border: `1px solid ${hovered ? `${accent}80` : "rgba(226,232,240,1)"}`,
+        backdropFilter: "blur(10px)",
+        boxShadow: hovered ? `0 12px 30px rgba(0,0,0,0.08), 0 0 20px ${accent}22` : "0 2px 12px rgba(0,0,0,0.06)",
         transition: "border-color 0.3s, box-shadow 0.3s",
       }}
       whileHover={{ y: -10, scale: 1.02 }}
@@ -106,7 +108,7 @@ function WhyServiceCard({ icon: Icon, title, body, accent, index }: any) {
         <Icon size={20} style={{ color: accent }} />
       </div>
       <h3
-        className="text-slate-900 font-semibold text-[1.02rem] mb-3 transition-colors duration-300 group-hover:text-blue-700"
+        className="text-slate-900 font-semibold text-[1.02rem] mb-3 transition-colors duration-300"
       >
         {title}
       </h3>
@@ -151,12 +153,24 @@ export default function ServicesWhyUs() {
       className="relative overflow-hidden"
       style={{ background: "linear-gradient(180deg,#ffffff 0%,#f8fafc 55%,#ffffff 100%)" }}
     >
+      {/* Grid texture */}
+      <div
+        className="absolute inset-0 opacity-[0.04] pointer-events-none"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(37,99,235,0.7) 1px,transparent 1px), linear-gradient(90deg,rgba(37,99,235,0.7) 1px,transparent 1px)",
+          backgroundSize: "64px 64px",
+        }}
+      />
+      {/* Ambient glows */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute left-1/4 top-0 w-[600px] h-[600px] rounded-full"
+          style={{ background: "radial-gradient(circle,rgba(37,99,235,0.08) 0%,transparent 68%)", filter: "blur(40px)" }} />
+        <div className="absolute right-1/4 bottom-0 w-[500px] h-[500px] rounded-full"
+          style={{ background: "radial-gradient(circle,rgba(6,182,212,0.06) 0%,transparent 68%)", filter: "blur(36px)" }} />
+      </div>
       <div className="absolute top-0 left-0 right-0 h-px"
-        style={{ background: "linear-gradient(90deg,transparent,rgba(37,99,235,0.16),transparent)" }} />
-      <div className="absolute right-0 top-1/3 w-[700px] h-[700px] rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle,rgba(37,99,235,0.034) 0%,transparent 68%)" }} />
-      <div className="absolute left-0 bottom-1/4 w-[500px] h-[500px] rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle,rgba(6,182,212,0.03) 0%,transparent 68%)" }} />
+        style={{ background: "linear-gradient(90deg,transparent,rgba(37,99,235,0.5),rgba(6,182,212,0.35),transparent)" }} />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 py-36">
 
@@ -229,7 +243,7 @@ export default function ServicesWhyUs() {
                 >
                   {value}
                 </div>
-                <div className="text-white/42 text-xs font-medium">{label}</div>
+                <div className="text-white/60 text-xs font-medium">{label}</div>
               </div>
             ))}
           </div>

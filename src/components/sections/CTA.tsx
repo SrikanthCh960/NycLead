@@ -2,12 +2,11 @@
 
 import { useRef, useState } from "react";
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
-import { ArrowRight, Mail, Phone, Calendar } from "lucide-react";
+import { ArrowRight, Mail, Phone } from "lucide-react";
 
 const contactOptions = [
-  { icon: Mail, label: "Email Us", sub: "hello@nycgravitynet.com" },
-  { icon: Phone, label: "Call Us", sub: "+1 (212) 555-0190" },
-  { icon: Calendar, label: "Book a Call", sub: "30-min strategy session" },
+  { icon: Mail, label: "Email Us", sub: "Info@nycgravitynet.com" },
+  { icon: Phone, label: "Call Us", sub: "631-390-8621" },
 ];
 
 export default function CTA() {
@@ -99,7 +98,7 @@ export default function CTA() {
             className="flex flex-wrap items-center justify-center gap-4 mb-5"
           >
             <motion.a
-              href="mailto:hello@nycgravitynet.com"
+              href="/contact"
               onMouseMove={(e) => {
                 const r = e.currentTarget.getBoundingClientRect();
                 setPos({ x: (e.clientX - r.left - r.width / 2) * 0.28, y: (e.clientY - r.top - r.height / 2) * 0.28 });
@@ -138,7 +137,7 @@ export default function CTA() {
           initial={{ opacity: 0, y: 36 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.7, duration: 0.9 }}
-          className="grid sm:grid-cols-3 gap-4 max-w-3xl mx-auto"
+          className="grid sm:grid-cols-2 gap-4 max-w-2xl mx-auto"
         >
           {contactOptions.map(({ icon: Icon, label, sub }, i) => (
             <motion.div

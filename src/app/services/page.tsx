@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import SmoothScroll from "@/components/layout/SmoothScroll";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import ServicesHero         from "@/components/services/Hero";
-import ServicesIntro        from "@/components/services/Introduction";
-import ServicesGrid         from "@/components/services/ServicesGrid";
-import ServicesWhyUs        from "@/components/services/WhyUs";
-import ServicesCTA          from "@/components/services/ServicesCTA";
+import ServicesHero from "@/components/services/Hero";
+
+import ServicesGrid from "@/components/services/ServicesGrid";
+import ServicesWhyUs from "@/components/services/WhyUs";
+import ServicesCTA from "@/components/services/ServicesCTA";
 
 export const metadata: Metadata = {
   title: "Services | NYC GravityNet — Technology Solutions",
@@ -20,9 +20,9 @@ export default function ServicesPage() {
       <Navbar />
       <main>
         <ServicesHero />
-        <ServicesIntro />
-        <ServicesGrid />
+
         <ServicesWhyUs />
+        <ServicesGrid />
         <ServicesCTA />
       </main>
       <Footer />

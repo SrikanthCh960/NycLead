@@ -89,7 +89,7 @@ export default function ServiceCTA({ ctaText, accent, accentRgb }: Props) {
           className="flex flex-wrap items-center justify-center gap-4 mb-14"
         >
           <motion.a
-            href="mailto:hello@nycgravitynet.com"
+            href="/contact"
             onMouseMove={(e) => {
               const r = e.currentTarget.getBoundingClientRect();
               setMagnet({ x: (e.clientX - r.left - r.width/2)*0.28, y: (e.clientY - r.top - r.height/2)*0.28 });

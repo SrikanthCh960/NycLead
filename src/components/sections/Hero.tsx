@@ -211,7 +211,7 @@ export default function Hero() {
             className="flex flex-wrap justify-center gap-4"
           >
             <motion.a
-              href="#contact"
+              href="/contact"
               onMouseMove={(e) => {
                 const r = e.currentTarget.getBoundingClientRect();
                 setPrimaryPos({

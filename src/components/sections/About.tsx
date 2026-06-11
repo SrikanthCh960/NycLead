@@ -3,7 +3,7 @@
 import { useRef, useState, useCallback } from "react";
 import Image from "next/image";
 import { motion, useInView, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
-import { CheckCircle2, ArrowUpRight, Target, Shield, TrendingUp, Users, ArrowRight } from "lucide-react";
+import { CheckCircle2, ArrowUpRight, Target, Shield, TrendingUp, Users } from "lucide-react";
 
 const pillars = [
   { num: "01", title: "Strategic Vision", body: "We align every technology decision with your long-term business objectives, ensuring every solution compounds value over time.", icon: Target, accent: "#2563eb", accentB: "#1e3a8a", accentRgb: "37,99,235" },
@@ -102,26 +102,6 @@ function PillarCard({ num, title, body, icon: Icon, accent, accentB, accentRgb, 
             <h3 className="text-slate-900 font-bold text-[1rem] mb-3 leading-snug">{title}</h3>
             <p className="text-slate-500 text-sm leading-[1.75] mb-5">{body}</p>
 
-            {/* Learn More CTA */}
-            <div className="flex items-center gap-1.5 overflow-hidden" style={{ color: "#2563eb" }}>
-              <span className="text-sm font-semibold">Learn More</span>
-              <div className="relative w-4 h-4 overflow-hidden">
-                <motion.div
-                  animate={hovered ? { x: [0, 18] } : { x: 0 }}
-                  transition={{ duration: 0.3, ease: "easeInOut" }}
-                  className="absolute inset-0 flex items-center justify-center"
-                >
-                  <ArrowRight size={14} strokeWidth={2.5} />
-                </motion.div>
-                <motion.div
-                  animate={hovered ? { x: ["-100%", "0%"] } : { x: "-100%" }}
-                  transition={{ duration: 0.3, ease: "easeInOut" }}
-                  className="absolute inset-0 flex items-center justify-center"
-                >
-                  <ArrowRight size={14} strokeWidth={2.5} />
-                </motion.div>
-              </div>
-            </div>
           </div>
         </motion.div>
       </div>
@@ -199,16 +179,6 @@ export default function About() {
                 className="w-12 h-[2px] bg-gradient-to-r from-blue-600 to-cyan-500 origin-left rounded-full mb-8"
               />
 
-              <motion.a
-                href="#contact"
-                initial={{ opacity: 0 }}
-                animate={inView ? { opacity: 1 } : {}}
-                transition={{ delay: 0.7, duration: 0.8 }}
-                className="group inline-flex items-center gap-2 text-blue-600 font-semibold text-sm hover:gap-3 transition-all duration-300"
-              >
-                Work With Us
-                <ArrowUpRight size={15} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
-              </motion.a>
             </div>
 
             {/* Right paragraphs */}
