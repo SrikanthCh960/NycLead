@@ -23,7 +23,7 @@ export default function ServiceHero({ config, slug }: Props) {
     <section
       ref={sectionRef}
       className="relative min-h-screen flex items-center overflow-hidden"
-      style={{ background: "linear-gradient(155deg,#020810 0%,#050d1d 52%,#030912 100%)" }}
+      style={{ background: "linear-gradient(155deg,#dde4f8 0%,#e8edfb 52%,#eef1fc 100%)" }}
     >
       {/* Full-screen background image */}
       {config.image && (
@@ -79,11 +79,11 @@ export default function ServiceHero({ config, slug }: Props) {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="flex items-center gap-2 mb-12 text-white/35 text-xs font-medium"
+          className="flex items-center gap-2 mb-12 text-slate-400 text-xs font-medium"
         >
-          <Link href="/" className="hover:text-white/65 transition-colors">Home</Link>
+          <Link href="/" className="hover:text-slate-700 transition-colors">Home</Link>
           <ChevronRight size={12} />
-          <Link href="/services" className="hover:text-white/65 transition-colors">Services</Link>
+          <Link href="/services" className="hover:text-slate-700 transition-colors">Services</Link>
           <ChevronRight size={12} />
           <span style={{ color: accent }}>{config.badge}</span>
         </motion.div>
@@ -121,7 +121,7 @@ export default function ServiceHero({ config, slug }: Props) {
             initial={{ opacity: 0, y: 22 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.38, duration: 0.95 }}
-            className="text-white/60 text-[1.05rem] leading-[1.88] mb-12 max-w-[580px]"
+            className="text-[1.05rem] leading-[1.88] mb-12 max-w-[580px]" style={{ color: "#f2f2f2" }}
           >
             {config.subtitle}
           </motion.p>
@@ -152,7 +152,7 @@ export default function ServiceHero({ config, slug }: Props) {
             </a>
             <Link
               href="/services"
-              className="group inline-flex items-center gap-2 text-white/50 hover:text-white/80 font-medium text-sm transition-colors duration-300"
+              className="group inline-flex items-center gap-2 text-slate-500 hover:text-slate-800 font-medium text-sm transition-colors duration-300"
             >
               <ArrowLeft size={13} className="group-hover:-translate-x-0.5 transition-transform duration-300" />
               All Services
@@ -165,7 +165,7 @@ export default function ServiceHero({ config, slug }: Props) {
       <motion.div style={{ opacity: fadeOut }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 pointer-events-none">
         <motion.div animate={{ y: [0,6,0] }} transition={{ duration: 1.6, repeat: Infinity }}
-          className="w-px h-8 bg-gradient-to-b from-white/18 to-transparent" />
+          className="w-px h-8 bg-gradient-to-b from-slate-400/40 to-transparent" />
       </motion.div>
     </section>
   );

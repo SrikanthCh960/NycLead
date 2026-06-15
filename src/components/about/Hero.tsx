@@ -51,7 +51,7 @@ export default function AboutHero() {
     <section
       ref={sectionRef}
       className="relative min-h-screen flex items-center overflow-hidden"
-      style={{ background: "linear-gradient(160deg, #02060f 0%, #060d1e 55%, #030912 100%)" }}
+      style={{ background: "linear-gradient(160deg, #1636da 0%, #1636da 55%, #1636da 100%)" }}
     >
       {/* ── Animated grid texture ── */}
       <div

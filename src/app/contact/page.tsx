@@ -42,7 +42,7 @@ function ContactInfoCard() {
   const contactItems = [
     { icon: Mail, label: "Email", value: CONTACT_EMAIL, href: `mailto:${CONTACT_EMAIL}`, clickable: true },
     {
-      icon: MapPin, label: "Address", value: (
+      icon: MapPin, label: "New York Office", value: (
         <>
           NYC GRAVITYNET LLC<br />
           445 Broadhollow Rd, Suite 210<br />
@@ -50,7 +50,17 @@ function ContactInfoCard() {
         </>
       ), href: null, clickable: false
     },
-    { icon: Phone, label: "Office", value: "631-390-8621", href: "tel:6313908621", clickable: true },
+    {
+      icon: MapPin, label: "Hyderabad Office", value: (
+        <>
+          Ground Floor, Sidhi Vinayak Nilayam<br />
+          Plot No 63, Nallagandla Rd<br />
+          Hyderabad, Telangana 500019
+        </>
+      ), href: null, clickable: false
+    },
+    { icon: Phone, label: "Office (US)", value: "631-390-8621", href: "tel:6313908621", clickable: true },
+    { icon: Phone, label: "Office (India)", value: "099890 57925", href: "tel:09989057925", clickable: true },
     { icon: Printer, label: "Fax", value: "631-390-8620", href: null, clickable: false },
   ];
 
@@ -178,7 +188,7 @@ export default function ContactPage() {
       <Navbar />
       <main
         className="min-h-screen pt-28 pb-24 relative overflow-hidden"
-        style={{ background: "linear-gradient(180deg, #03070f 0%, #060d1a 50%, #03070f 100%)" }}
+        style={{ background: "linear-gradient(180deg, #1636da 0%, #1636da 50%, #1636da 100%)" }}
       >
         {/* Ambient decorations */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">

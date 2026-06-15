@@ -411,7 +411,7 @@ function ServiceCard(props: typeof services[0] & { index: number }) {
           <div
             className="absolute inset-0 rounded-[27px]"
             style={{
-              background: "linear-gradient(160deg, rgba(12,18,40,0.97) 0%, rgba(6,10,24,0.99) 100%)",
+              background: "linear-gradient(160deg, #112fab 0%, #0e259a 100%)",
               backdropFilter: "blur(24px)",
               WebkitBackdropFilter: "blur(24px)",
             }}
@@ -479,7 +479,7 @@ function ServiceCard(props: typeof services[0] & { index: number }) {
             <div
               className="absolute bottom-0 left-0 right-0 h-20 pointer-events-none"
               style={{
-                background: "linear-gradient(to top, rgba(6,10,24,0.99) 0%, transparent 100%)",
+                background: "linear-gradient(to top, rgba(17,43,171,0.99) 0%, transparent 100%)",
               }}
             />
           </div>
@@ -498,7 +498,7 @@ function ServiceCard(props: typeof services[0] & { index: number }) {
                     className="inline-flex items-center text-[10px] px-2.5 py-1 rounded-full font-bold tracking-[0.12em] uppercase"
                     style={{
                       color: accent,
-                      background: `rgba(${accentRgb}, 0.09)`,
+                      background: `rgba(255,255,255, 0.12)`,
                       border: `1px solid rgba(${accentRgb}, 0.2)`,
                     }}
                   >
@@ -513,7 +513,7 @@ function ServiceCard(props: typeof services[0] & { index: number }) {
               </h3>
 
               {/* Description */}
-              <p className="text-white/40 text-[0.82rem] leading-[1.8] mb-6">
+              <p className="text-white/75 text-[0.82rem] leading-[1.8] mb-6">
                 {description}
               </p>
             </div>
@@ -701,7 +701,7 @@ export default function Services() {
         ref={cyberRef}
         id="cybersecurity"
         className="relative overflow-hidden"
-        style={{ background: "linear-gradient(160deg, #020810 0%, #080f1e 50%, #020810 100%)" }}
+        style={{ background: "linear-gradient(160deg, #1636da 0%, #1636da 50%, #1636da 100%)" }}
       >
         <div
           className="absolute inset-0 opacity-[0.06] pointer-events-none"
@@ -741,8 +741,8 @@ export default function Services() {
                   transition={{ delay: 0.1, duration: 1, ease: [0.22, 1, 0.36, 1] }}
                   className="text-4xl md:text-5xl font-bold text-white leading-[1.08] tracking-[-0.025em]"
                 >
-                  <span className="text-cyan-300">24/7 Protection.</span>{" "}
-                  <span className="gradient-text-dark">
+                  <span className="text-white">24/7 Protection.</span>{" "}
+                  <span className="text-white">
                     Real-Time Defense.
                   </span>
                 </motion.h2>

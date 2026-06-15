@@ -3,10 +3,10 @@
 @import "tailwindcss";
 
 :root {
-  --navy-950: #03070f;
-  --navy-900: #060d1a;
-  --navy-800: #0a1628;
-  --navy-700: #0d1f3c;
+  --navy-950: #1636da;
+  --navy-900: #1636da;
+  --navy-800: #1a3bbf;
+  --navy-700: #1e45cc;
   --blue-accent: #2563eb;
   --cyan-accent: #06b6d4;
   --cyan-light: #67e8f9;
@@ -18,7 +18,7 @@
 
 html {
   scroll-behavior: auto;
-  background-color: #03070f;
+  background-color: #1636da;
 }
 
 html.lenis {
@@ -35,7 +35,7 @@ html.lenis {
 
 body {
   font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
-  background-color: #03070f;
+  background-color: #1636da;
   color: #ffffff;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
@@ -47,7 +47,7 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #060d1a;
+  background: #1636da;
 }
 
 ::-webkit-scrollbar-thumb {

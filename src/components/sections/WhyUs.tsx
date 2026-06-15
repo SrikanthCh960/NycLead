@@ -79,7 +79,7 @@ function WhyCard({
           rotateX,
           rotateY,
           transformStyle: "preserve-3d",
-          background: "linear-gradient(145deg, #0d1526 0%, #080f1e 100%)",
+          background: "linear-gradient(145deg, #0d1526 0%, #1636da 100%)",
           border: `1px solid ${hovered ? `${color}40` : "rgba(37,99,235,0.18)"}`,
           boxShadow: hovered
             ? `0 8px 40px rgba(0,0,0,0.50), 0 0 30px ${color}18, inset 0 1px 0 rgba(255,255,255,0.05)`
@@ -298,7 +298,7 @@ export default function WhyUs() {
                     transition={{ delay: 0.38 + i * 0.1, duration: 0.7 }}
                     className="group relative rounded-2xl p-5 overflow-hidden transition-all duration-400 hover:-translate-y-1"
                     style={{
-                      background: "linear-gradient(145deg, #0d1526 0%, #080f1e 100%)",
+                      background: "linear-gradient(145deg, #0d1526 0%, #1636da 100%)",
                       border: "1px solid rgba(37,99,235,0.20)",
                       boxShadow: "0 4px 20px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.04)",
                     }}
@@ -387,7 +387,7 @@ export default function WhyUs() {
       <div
         ref={engRef}
         className="relative overflow-hidden"
-        style={{ background: "linear-gradient(160deg, #020810 0%, #080f1e 50%, #020810 100%)" }}
+        style={{ background: "linear-gradient(160deg, #1636da 0%, #1636da 50%, #1636da 100%)" }}
       >
         <div
           className="absolute inset-0 opacity-[0.05] pointer-events-none"

@@ -214,7 +214,7 @@ export default function About() {
       <div
         ref={consultingRef}
         className="relative overflow-hidden"
-        style={{ background: "linear-gradient(160deg, #060d1e 0%, #0d1f3c 45%, #050d1c 100%)" }}
+        style={{ background: "linear-gradient(160deg, #1636da 0%, #1636da 45%, #1636da 100%)" }}
       >
         {/* Parallax bg texture */}
         <motion.div

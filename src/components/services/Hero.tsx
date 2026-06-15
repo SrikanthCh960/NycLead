@@ -38,7 +38,7 @@ export default function ServicesHero() {
     <section
       ref={sectionRef}
       className="relative min-h-screen flex items-center overflow-hidden"
-      style={{ background: "linear-gradient(155deg, #020810 0%, #050d1d 50%, #030912 100%)" }}
+      style={{ background: "linear-gradient(155deg, #1636da 0%, #1636da 50%, #1636da 100%)" }}
     >
       {/* ── Grid texture ── */}
       <div

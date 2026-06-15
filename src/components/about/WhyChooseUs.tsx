@@ -124,7 +124,7 @@ export default function AboutWhyUs() {
     <section
       ref={sectionRef}
       className="relative overflow-hidden"
-      style={{ background: "linear-gradient(160deg, #030912 0%, #060d1e 55%, #040b18 100%)" }}
+      style={{ background: "linear-gradient(160deg, #1636da 0%, #1636da 55%, #1636da 100%)" }}
     >
       {/* Grid texture */}
       <div

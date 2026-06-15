@@ -82,46 +82,6 @@ export default function Hero() {
         </div>
       </motion.div>
 
-      {/* ── Overlay layers ── */}
-      {/* Strong left-to-right gradient — text area is dark, right side lets image breathe */}
-      <div
-        className="absolute inset-0 z-[1]"
-        style={{
-          background:
-            "linear-gradient(100deg, rgba(2,6,18,0.92) 0%, rgba(3,9,24,0.85) 38%, rgba(4,12,28,0.70) 65%, rgba(2,8,20,0.50) 100%)",
-        }}
-      />
-      {/* Bottom fade */}
-      <div
-        className="absolute bottom-0 left-0 right-0 h-48 z-[2]"
-        style={{ background: "linear-gradient(to top, rgba(2,6,18,0.95), transparent)" }}
-      />
-      {/* Top fade */}
-      <div
-        className="absolute top-0 left-0 right-0 h-32 z-[2]"
-        style={{ background: "linear-gradient(to bottom, rgba(2,6,18,0.75), transparent)" }}
-      />
-
-      {/* Blue accent glow behind text */}
-      <div
-        className="absolute inset-0 z-[3] pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse 50% 70% at 0% 55%, rgba(37,99,235,0.18) 0%, transparent 60%)",
-        }}
-      />
-
-      {/* Dot grid */}
-      <div
-        className="absolute inset-0 z-[3] pointer-events-none"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle, rgba(255,255,255,0.09) 1px, transparent 1px)",
-          backgroundSize: "52px 52px",
-          maskImage:
-            "radial-gradient(ellipse 60% 90% at 30% 50%, black 10%, transparent 100%)",
-        }}
-      />
 
       {/* ── Top accent line ── */}
       <motion.div
@@ -148,7 +108,7 @@ export default function Hero() {
             transition={{ delay: 0.3, duration: 0.9 }}
             className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full mb-8"
             style={{
-              background: "rgba(37,99,235,0.22)",
+              background: "#112fab",
               border: "1px solid rgba(99,179,237,0.45)",
               backdropFilter: "blur(12px)",
             }}
@@ -174,14 +134,11 @@ export default function Hero() {
                 >
                   <h1
                     className={`font-extrabold leading-[1.08] tracking-[-0.024em]
-                      text-3xl sm:text-4xl md:text-5xl lg:text-6xl
-                      ${i === 2
-                        ? "gradient-text"
-                        : "text-white"
-                      }`}
-                    style={i !== 2 ? {
-                      textShadow: "0 2px 24px rgba(0,0,0,0.8), 0 1px 4px rgba(0,0,0,0.9)",
-                    } : {}}
+                      text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white`}
+                    style={i === 2
+                      ? { color: "#112fab" }
+                      : { textShadow: "0 2px 24px rgba(0,0,0,0.8), 0 1px 4px rgba(0,0,0,0.9)" }
+                    }
                   >
                     {line}
                   </h1>

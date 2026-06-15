@@ -221,7 +221,7 @@ export default function ServicesWhyUs() {
           ref={statsRef}
           className="mt-16 rounded-2xl overflow-hidden"
           style={{
-            background: "linear-gradient(135deg,#060d1e 0%,#0a1628 100%)",
+            background: "linear-gradient(135deg,#1636da 0%,#1636da 100%)",
             border: "1px solid rgba(37,99,235,0.16)",
           }}
         >

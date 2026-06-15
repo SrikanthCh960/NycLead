@@ -72,7 +72,7 @@ export default function ServiceFAQ({ faqs, accent, accentRgb }: Props) {
     <section
       ref={ref}
       className="relative overflow-hidden"
-      style={{ background: "linear-gradient(160deg,#030912 0%,#060d1e 55%,#040b18 100%)" }}
+      style={{ background: "linear-gradient(160deg,#1636da 0%,#1636da 55%,#1636da 100%)" }}
     >
       <div className="absolute inset-0 opacity-[0.038] pointer-events-none"
         style={{

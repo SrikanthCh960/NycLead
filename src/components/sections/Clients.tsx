@@ -1,82 +1,55 @@
 "use client";
 
-import { useRef, useState, useCallback } from "react";
-import { motion, useInView, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import Image from "next/image";
 
 const clients = [
-  "Nexus Financial",
-  "HealthBridge Systems",
-  "Apex Retail Group",
-  "CoreLogic Partners",
-  "DataPulse Inc.",
-  "SkyRoute Logistics",
-  "MedTech Innovations",
-  "PrimeEdge Capital",
-  "NovaTech Labs",
-  "Veritas Consulting",
-  "Meridian Healthcare",
-  "Cascade Digital",
+  { name: "AT&T", file: "Attnt logo.png" },
+  { name: "Comcast", file: "Comcast.jpg" },
+  { name: "Verizon", file: "veri.png" },
+  { name: "Meta", file: "Meta-Logo.png" },
+  { name: "FedEx", file: "4373166_fedex_logo_logos_icon.png" },
+  { name: "Humana", file: "Humana.jpg" },
+  { name: "Cigna", file: "Cigna.png" },
+  { name: "Ascension", file: "Ascension-Emblem.png" },
+  { name: "Tenet Healthcare", file: "1280px-Tenet_Healthcare_logo.svg.png" },
+  { name: "Abrazo Health", file: "abrazo_health_logo-h-cmyk.png" },
+  { name: "CareFirst", file: "logo-carefirst.svg" },
+  { name: "Beacon", file: "Beacon.png" },
+  { name: "SVB", file: "SVB logo.png" },
+  { name: "First Citizens Bank", file: "BrandLogo.org-First-Citizens-Bank-Logo.png" },
+  { name: "Truist Bank", file: "Truist Bank.png" },
+  { name: "Centene", file: "Centene_logo_PNG7.png" },
+  { name: "CenterPoint Energy", file: "CenterPointEnergy.jpg" },
+  { name: "Oncor", file: "oncor_logo.png" },
+  { name: "Nucor", file: "Nucor.svg" },
+  { name: "Champion Homes", file: "champion-homes.png" },
+  { name: "Mosaic", file: "Mosaic.jpg" },
+  { name: "Montgomery County", file: "Montogomery county logo.png" },
+  { name: "DHHS", file: "DHHS.png" },
+  { name: "Adecco", file: "adecco png.png" },
+  { name: "Signit", file: "Signit.png" },
+  { name: "Sreeson", file: "sreeson.png" },
 ];
 
-function ClientLogo({ name }: { name: string }) {
-  const initials = name
-    .split(" ")
-    .slice(0, 2)
-    .map((w) => w[0])
-    .join("");
-
-  const cardRef = useRef<HTMLDivElement>(null);
-  const [hovered, setHovered] = useState(false);
-
-  const rawX = useMotionValue(0);
-  const rawY = useMotionValue(0);
-  const springConfig = { stiffness: 180, damping: 28, mass: 0.6 };
-  const rotateX = useSpring(useTransform(rawY, [-0.5, 0.5], [7, -7]), springConfig);
-  const rotateY = useSpring(useTransform(rawX, [-0.5, 0.5], [-7, 7]), springConfig);
-
-  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = cardRef.current?.getBoundingClientRect();
-    if (!rect) return;
-    const nx = (e.clientX - rect.left) / rect.width - 0.5;
-    const ny = (e.clientY - rect.top) / rect.height - 0.5;
-    rawX.set(nx);
-    rawY.set(ny);
-  }, [rawX, rawY]);
-
-  const handleMouseLeave = useCallback(() => {
-    rawX.set(0);
-    rawY.set(0);
-    setHovered(false);
-  }, [rawX, rawY]);
-
+function ClientLogo({ name, file }: { name: string; file: string }) {
   return (
-    <motion.div
-      ref={cardRef}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={handleMouseLeave}
-      className="group relative flex items-center gap-3 px-6 py-4 rounded-xl border border-slate-200 bg-white shrink-0 mx-2 min-w-[175px] cursor-default will-change-transform overflow-hidden"
-      style={{
-        rotateX,
-        rotateY,
-        transformStyle: "preserve-3d",
-        borderColor: hovered ? "rgba(59, 130, 246, 0.5)" : "rgb(226, 232, 240)",
-        backgroundColor: hovered ? "rgba(239, 246, 255, 1)" : "white",
-        boxShadow: hovered ? "0 4px 12px rgba(0,0,0,0.1)" : "none",
-        transition: "border-color 0.3s, background-color 0.3s, box-shadow 0.3s",
-      }}
-      whileHover={{ y: -10, scale: 1.02 }}
-      transition={{ type: "spring", stiffness: 200, damping: 22 }}
-    >
-      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-100 to-slate-100 border border-blue-200/60 flex items-center justify-center shrink-0">
-        <span className="text-xs font-bold text-blue-700">{initials}</span>
-      </div>
-      <span className="text-slate-600 text-sm font-medium group-hover:text-blue-700 transition-colors whitespace-nowrap">
-        {name}
-      </span>
-    </motion.div>
+    <div className="flex items-center justify-center px-6 py-3 rounded-xl border border-slate-200 bg-white shrink-0 mx-3 min-w-[140px] h-[72px] hover:border-blue-300 hover:shadow-md transition-all duration-300">
+      <Image
+        src={`/clients/${file}`}
+        alt={name}
+        width={110}
+        height={48}
+        className="object-contain max-h-[48px] w-auto transition-all duration-300"
+        unoptimized
+      />
+    </div>
   );
 }
+
+const row1 = clients.slice(0, 13);
+const row2 = clients.slice(13);
 
 export default function Clients() {
   const ref = useRef<HTMLDivElement>(null);
@@ -113,7 +86,6 @@ export default function Clients() {
           </div>
         </div>
 
-        {/* Client logo wall — fade edges match bg-white (#ffffff) */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
@@ -127,8 +99,8 @@ export default function Clients() {
             <div className="absolute right-0 top-0 bottom-0 w-32 z-10 pointer-events-none"
               style={{ background: "linear-gradient(-90deg, #ffffff, transparent)" }} />
             <div className="marquee-track">
-              {[...clients, ...clients].map((c, i) => (
-                <ClientLogo key={i} name={c} />
+              {[...row1, ...row1].map((c, i) => (
+                <ClientLogo key={i} name={c.name} file={c.file} />
               ))}
             </div>
           </div>
@@ -140,13 +112,8 @@ export default function Clients() {
             <div className="absolute right-0 top-0 bottom-0 w-32 z-10 pointer-events-none"
               style={{ background: "linear-gradient(-90deg, #ffffff, transparent)" }} />
             <div className="marquee-track-reverse">
-              {[
-                ...clients.slice(6),
-                ...clients.slice(0, 6),
-                ...clients.slice(6),
-                ...clients.slice(0, 6),
-              ].map((c, i) => (
-                <ClientLogo key={i} name={c} />
+              {[...row2, ...row2].map((c, i) => (
+                <ClientLogo key={i} name={c.name} file={c.file} />
               ))}
             </div>
           </div>

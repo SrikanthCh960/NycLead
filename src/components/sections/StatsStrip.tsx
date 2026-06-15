@@ -150,7 +150,7 @@ export default function StatsStrip() {
     <section
       ref={ref}
       className="relative overflow-hidden"
-      style={{ background: "linear-gradient(135deg, #0d1f3c 0%, #0a1628 50%, #061020 100%)" }}
+      style={{ background: "linear-gradient(135deg, #1636da 0%, #1636da 50%, #061020 100%)" }}
     >
       {/* Top & bottom accent lines */}
       <div

@@ -30,7 +30,9 @@ const socials = [
 
 const contactItems = [
   { icon: MapPin, text: "NYC GRAVITYNET LLC\n445 Broadhollow Rd, Suite 210\nMelville, NY 11747" },
+  { icon: MapPin, text: "Ground Floor, Sidhi Vinayak Nilayam\nPlot No 63, Nallagandla Rd\nHyderabad, Telangana 500019" },
   { icon: Phone, text: "631-390-8621" },
+  { icon: Phone, text: "099890 57925" },
   { icon: Mail, text: "Info@nycgravitynet.com" },
 ];
 

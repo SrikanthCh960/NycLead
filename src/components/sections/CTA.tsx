@@ -21,7 +21,7 @@ export default function CTA() {
     <section id="contact" ref={ref} className="relative overflow-hidden" style={{ minHeight: "640px" }}>
 
       {/* Background gradient */}
-      <div className="absolute inset-0 z-[1]" style={{ background: "linear-gradient(160deg, #03081a 0%, #060f24 50%, #020810 100%)" }} />
+      <div className="absolute inset-0 z-[1]" style={{ background: "linear-gradient(160deg, #1636da 0%, #1636da 50%, #1636da 100%)" }} />
 
       {/* Center radial glow */}
       <motion.div
