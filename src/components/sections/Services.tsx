@@ -530,7 +530,7 @@ function ServiceCard(props: typeof services[0] & { index: number }) {
 
               {/* CTA */}
               <div className="flex items-center justify-between">
-                <Link href={`/services/${slug}`} className="group/btn flex items-center gap-2.5">
+                <Link href={`/services/${slug}`} className="group/btn flex items-center gap-2.5 px-4 py-2 rounded-lg" style={{ background: "white" }}>
                   <div
                     className="relative overflow-hidden flex items-center gap-2 text-[0.78rem] font-bold tracking-wide uppercase"
                     style={{ color: accent }}

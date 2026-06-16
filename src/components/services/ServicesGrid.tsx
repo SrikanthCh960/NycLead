@@ -133,7 +133,7 @@ function ServiceCard({ service, index }: { service: Service; index: number }) {
       onMouseLeave={handleMouseLeave}
       className="svc-card opacity-0 group relative rounded-2xl overflow-hidden flex flex-col will-change-transform"
       style={{
-        background: "rgba(255,255,255,0.04)",
+        background: "#1636da",
         border: `1px solid ${hovered ? service.accentBorder : "rgba(255,255,255,0.08)"}`,
         boxShadow: hovered
           ? `0 20px 60px rgba(0,0,0,0.5), 0 0 30px ${service.accentSoft}`
@@ -250,8 +250,8 @@ function ServiceCard({ service, index }: { service: Service; index: number }) {
         {/* Learn More */}
         <Link
           href={`/services/${service.slug}`}
-          className="group/btn self-start inline-flex items-center gap-2 text-xs font-semibold transition-all duration-300"
-          style={{ color: service.accent }}
+          className="group/btn self-start inline-flex items-center gap-2 text-xs font-semibold transition-all duration-300 px-4 py-2 rounded-lg"
+          style={{ color: service.accent, background: "white" }}
         >
           Learn More
           <ArrowUpRight
@@ -295,7 +295,7 @@ export default function ServicesGrid() {
       id="services-grid"
       ref={sectionRef}
       className="relative overflow-hidden"
-      style={{ background: "linear-gradient(160deg,#05101f 0%,#091528 40%,#0a1a30 70%,#071220 100%)" }}
+      style={{ background: "#e9edff" }}
     >
       {/* Ambient glows */}
       <div className="absolute inset-0 pointer-events-none">
@@ -328,7 +328,8 @@ export default function ServicesGrid() {
               initial={{ y: "100%", opacity: 0 }}
               animate={inView ? { y: 0, opacity: 1 } : {}}
               transition={{ delay: 0.12, duration: 1.05, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="text-4xl md:text-5xl lg:text-[3.4rem] font-bold text-white leading-[1.07] tracking-[-0.028em]"
+              className="text-4xl md:text-5xl lg:text-[3.4rem] font-bold leading-[1.07] tracking-[-0.028em]"
+              style={{ color: "#1636da" }}
             >
               End-to-End Technology{" "}
               <span className="gradient-text">Solutions</span>
@@ -339,7 +340,7 @@ export default function ServicesGrid() {
             initial={{ opacity: 0, y: 18 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.3, duration: 0.9 }}
-            className="text-white/50 text-[1.04rem] leading-[1.85]"
+            className="text-black text-[1.04rem] leading-[1.85]"
           >
             Six specialised practice areas, one unified team — working together
             to accelerate your digital future.
