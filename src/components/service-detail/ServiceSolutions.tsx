@@ -59,7 +59,7 @@ function ServiceSolutionCard({ title, description, tags, iconName, index, accent
       onMouseLeave={handleMouseLeave}
       className="sol-card opacity-0 group relative rounded-2xl p-8 overflow-hidden flex flex-col will-change-transform"
       style={{
-        background: "rgba(255,255,255,0.025)",
+        background: "#1636da",
         border: `1px solid rgba(${accentRgb},0.18)`,
         backdropFilter: "blur(10px)",
         rotateX,
@@ -123,7 +123,7 @@ export default function ServiceSolutions({ solutions, accent, accentRgb }: Props
     <section
       ref={sectionRef}
       className="relative overflow-hidden"
-      style={{ background: "linear-gradient(160deg,#1636da 0%,#1636da 55%,#1636da 100%)" }}
+      style={{ background: "#edf0ff" }}
     >
       <div className="absolute inset-0 opacity-[0.04] pointer-events-none"
         style={{
@@ -161,9 +161,10 @@ export default function ServiceSolutions({ solutions, accent, accentRgb }: Props
               initial={{ y: "100%", opacity: 0 }}
               animate={inView ? { y: 0, opacity: 1 } : {}}
               transition={{ delay: 0.12, duration: 1.05, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="text-4xl md:text-5xl font-bold text-white leading-[1.07] tracking-[-0.028em]"
+              className="text-4xl md:text-5xl font-bold leading-[1.07] tracking-[-0.028em]"
+              style={{ color: "#1636da" }}
             >
-              What We <span className="gradient-text">Deliver</span>
+              What We <span style={{ color: "#1636da" }}>Deliver</span>
             </motion.h2>
           </div>
 
@@ -171,7 +172,7 @@ export default function ServiceSolutions({ solutions, accent, accentRgb }: Props
             initial={{ opacity: 0, y: 18 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.28, duration: 0.9 }}
-            className="text-white/45 text-[1.03rem] leading-[1.85]"
+            className="text-black text-[1.03rem] leading-[1.85]"
           >
             A comprehensive portfolio of solutions designed to address your most
             pressing technology challenges with precision and expertise.

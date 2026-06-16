@@ -72,7 +72,7 @@ export default function ServiceFAQ({ faqs, accent, accentRgb }: Props) {
     <section
       ref={ref}
       className="relative overflow-hidden"
-      style={{ background: "linear-gradient(160deg,#1636da 0%,#1636da 55%,#1636da 100%)" }}
+      style={{ background: "#edf0ff" }}
     >
       <div className="absolute inset-0 opacity-[0.038] pointer-events-none"
         style={{
@@ -94,7 +94,7 @@ export default function ServiceFAQ({ faqs, accent, accentRgb }: Props) {
             style={{ background: `rgba(${accentRgb},0.12)`, border: `1px solid rgba(${accentRgb},0.28)` }}
           >
             <span className="w-1.5 h-1.5 rounded-full" style={{ background: accent }} />
-            <span className="text-xs font-semibold tracking-[0.18em] uppercase" style={{ color: accent }}>
+            <span className="text-xs font-semibold tracking-[0.18em] uppercase" style={{ color: "#1636da" }}>
               Frequently Asked Questions
             </span>
           </motion.div>
@@ -104,9 +104,10 @@ export default function ServiceFAQ({ faqs, accent, accentRgb }: Props) {
               initial={{ y: "100%", opacity: 0 }}
               animate={inView ? { y: 0, opacity: 1 } : {}}
               transition={{ delay: 0.12, duration: 1.05, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="text-4xl md:text-5xl font-bold text-white leading-[1.07] tracking-[-0.028em]"
+              className="text-4xl md:text-5xl font-bold leading-[1.07] tracking-[-0.028em]"
+              style={{ color: "#1636da" }}
             >
-              Common <span className="gradient-text">Questions</span>
+              Common <span style={{ color: "#1636da" }}>Questions</span>
             </motion.h2>
           </div>
         </div>

@@ -135,7 +135,7 @@ export default function ServicesIntro() {
     <section
       ref={ref}
       className="relative overflow-hidden"
-      style={{ background: "linear-gradient(180deg,#ffffff 0%,#f8fafc 60%,#ffffff 100%)" }}
+      style={{ background: "#edf0ff" }}
     >
       <div className="absolute top-0 left-0 right-0 h-px"
         style={{ background: "linear-gradient(90deg,transparent,rgba(37,99,235,0.15),transparent)" }} />

@@ -51,7 +51,7 @@ function WhyDetailCard({ icon: Icon, title, body, accent: a }: any) {
       onMouseLeave={handleMouseLeave}
       className="why-detail-card opacity-0 group relative rounded-2xl p-8 overflow-hidden cursor-default will-change-transform"
       style={{
-        background: "rgba(255,255,255,0.025)",
+        background: "#ffffff",
         border: `1px solid rgba(255,255,255,0.07)`,
         backdropFilter: "blur(10px)",
         rotateX,
@@ -71,8 +71,8 @@ function WhyDetailCard({ icon: Icon, title, body, accent: a }: any) {
         style={{ background: `${a}14`, border: `1px solid ${a}28` }}>
         <Icon size={20} style={{ color: a }} />
       </div>
-      <h3 className="text-white font-semibold text-[1.02rem] mb-3 transition-colors duration-300 group-hover:text-blue-400">{title}</h3>
-      <p className="text-white/44 text-sm leading-[1.80]">{body}</p>
+      <h3 className="font-semibold text-[1.02rem] mb-3 transition-colors duration-300" style={{ color: "#1636da" }}>{title}</h3>
+      <p className="text-black text-sm leading-[1.80]">{body}</p>
     </motion.div>
   );
 }

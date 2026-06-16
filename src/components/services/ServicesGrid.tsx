@@ -295,7 +295,7 @@ export default function ServicesGrid() {
       id="services-grid"
       ref={sectionRef}
       className="relative overflow-hidden"
-      style={{ background: "#e9edff" }}
+      style={{ background: "#edf0ff" }}
     >
       {/* Ambient glows */}
       <div className="absolute inset-0 pointer-events-none">

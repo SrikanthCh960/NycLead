@@ -64,7 +64,7 @@ const services = [
     accentB: "#06b6d4",
     accentRgb: "59,130,246",
     tags: ["Full-Stack", "APIs", "Mobile"],
-    slug: "software-development",
+    slug: "custom-software",
     visual: "software" as const,
   },
   {

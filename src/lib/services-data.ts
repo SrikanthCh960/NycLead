@@ -191,7 +191,7 @@ const cloudDevops: ServiceConfig = {
 
 // ─── CUSTOM SOFTWARE DEVELOPMENT ─────────────────────────────────────────────
 const softwareDevelopment: ServiceConfig = {
-  slug: "software-development",
+  slug: "custom-software",
   meta: {
     title:       "Custom Software Development | NYC GravityNet",
     description: "Enterprise software engineering — web and mobile applications, APIs, microservices, and platform modernization delivered by expert agile teams.",
@@ -352,7 +352,7 @@ export const servicesMap: Record<string, ServiceConfig> = {
   cybersecurity:          cybersecurity,
   "ai-automation":        aiAutomation,
   "cloud-devops":         cloudDevops,
-  "software-development": softwareDevelopment,
+  "custom-software": softwareDevelopment,
   "data-analytics":       dataAnalytics,
   "digital-transformation": digitalTransformation,
 };

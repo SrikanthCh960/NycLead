@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { servicesMap } from "@/lib/services-data";
 import ServiceDetailPage from "@/components/service-detail/ServiceDetailPage";
 
-const config = servicesMap["software-development"];
+const config = servicesMap["custom-software"];
 
 export const metadata: Metadata = {
   title:       config.meta.title,
