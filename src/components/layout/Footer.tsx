@@ -31,7 +31,7 @@ const socials = [
 const contactItems = [
   { icon: MapPin, text: "NYC GRAVITYNET LLC\n445 Broadhollow Rd, Suite 210\nMelville, NY 11747" },
   { icon: Phone, text: "631-390-8621" },
-  { icon: Phone, text: "099890 57925" },
+
   { icon: Mail, text: "Info@nycgravitynet.com" },
 ];
 
