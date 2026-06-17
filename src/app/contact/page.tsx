@@ -50,17 +50,7 @@ function ContactInfoCard() {
         </>
       ), href: null, clickable: false
     },
-    {
-      icon: MapPin, label: "Hyderabad Office", value: (
-        <>
-          Ground Floor, Sidhi Vinayak Nilayam<br />
-          Plot No 63, Nallagandla Rd<br />
-          Hyderabad, Telangana 500019
-        </>
-      ), href: null, clickable: false
-    },
     { icon: Phone, label: "Office (US)", value: "631-390-8621", href: "tel:6313908621", clickable: true },
-    { icon: Phone, label: "Office (India)", value: "099890 57925", href: "tel:09989057925", clickable: true },
     { icon: Printer, label: "Fax", value: "631-390-8620", href: null, clickable: false },
   ];
 
@@ -231,7 +221,7 @@ export default function ContactPage() {
                 className="text-4xl md:text-5xl lg:text-[3.4rem] font-bold text-white leading-[1.06] tracking-[-0.025em]"
               >
                 Let&apos;s Build Something{" "}
-                <span className="gradient-text-dark">Extraordinary</span>
+                <span style={{ background: "white", padding: "0 6px", borderRadius: "4px", color: "#1636da" }}>Extraordinary</span>
               </motion.h1>
             </div>
 

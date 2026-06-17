@@ -147,19 +147,6 @@ export default function Hero() {
             ))}
           </div>
 
-          {/* Subheading */}
-          <motion.p
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.1, duration: 0.95 }}
-            className="text-slate-200 text-sm sm:text-base md:text-lg leading-[1.8] mb-10 max-w-2xl font-[430]"
-            style={{ textShadow: "0 1px 12px rgba(0,0,0,0.8)" }}
-          >
-            NYC GravityNet helps organizations secure, modernize, and scale
-            with intelligent technology solutions that drive measurable
-            business outcomes.
-          </motion.p>
-
           {/* CTAs */}
           <motion.div
             initial={{ opacity: 0, y: 24 }}
